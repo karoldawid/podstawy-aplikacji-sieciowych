@@ -1,17 +1,19 @@
-package service;
+package org.example.service;
 
-import model.Role;
-import model.User;
-import model.Rental;
-import model.SportsFacility;
-import repository.UserRepository;
-import repository.RentalRepository;
-import repository.SportsFacilityRepository;
+import org.example.model.Role;
+import org.example.model.User;
+import org.example.model.Rental;
+import org.example.model.SportsFacility;
+import org.example.repository.UserRepository;
+import org.example.repository.RentalRepository;
+import org.example.repository.SportsFacilityRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class RentalServiceImpl implements RentalService{
     private final UserRepository userRepository;
     private final SportsFacilityRepository sportsFacilityRepository;

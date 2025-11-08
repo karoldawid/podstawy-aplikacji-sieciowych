@@ -1,6 +1,6 @@
-package service;
+package org.example.service;
 
-import model.Rental;
+import org.example.model.Rental;
 
 import java.time.LocalDateTime;
 import java.util.List;

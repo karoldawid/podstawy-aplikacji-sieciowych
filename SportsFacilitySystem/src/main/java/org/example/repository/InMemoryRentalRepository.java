@@ -1,10 +1,12 @@
-package repository;
+package org.example.repository;
 
-import model.Rental;
+import org.example.model.Rental;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class InMemoryRentalRepository implements RentalRepository{
     private HashMap<UUID, Rental> rentals = new HashMap<>();
     @Override
@@ -29,8 +31,8 @@ public class InMemoryRentalRepository implements RentalRepository{
     }
 
     @Override
-    public List<Rental> findByUserId(UUID clientId) {
-        return rentals.values().stream().filter(rental -> rental.getClientId().equals(clientId)).collect(Collectors.toList());
+    public List<Rental> findByUserId(UUID userId) {
+        return rentals.values().stream().filter(rental -> rental.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
     @Override

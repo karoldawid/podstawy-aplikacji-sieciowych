@@ -1,4 +1,4 @@
-package service;
+package org.example.service;
 
 public class RentalException extends Exception {
     public RentalException(String message) {

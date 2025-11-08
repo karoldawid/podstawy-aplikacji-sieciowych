@@ -1,4 +1,4 @@
-package model;
+package org.example.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,8 +31,8 @@ public class Rental {
         return userId;
     }
 
-    public void setClientId(UUID clientId) {
-        this.userId = clientId;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public UUID getFacilityId() {

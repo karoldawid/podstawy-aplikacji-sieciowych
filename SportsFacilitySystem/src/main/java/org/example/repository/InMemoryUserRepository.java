@@ -1,9 +1,11 @@
-package repository;
+package org.example.repository;
 
-import model.User;
+import org.example.model.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
 public class InMemoryUserRepository implements UserRepository {
     private final HashMap<UUID, User> clients = new HashMap<>();
     // pod PAS rozważyć ConcurrentHashMap do obłsugi wielowątkowości

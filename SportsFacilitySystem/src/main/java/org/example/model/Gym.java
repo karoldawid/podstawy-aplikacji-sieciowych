@@ -1,4 +1,4 @@
-package model;
+package org.example.model;
 
 public class Gym extends SportsFacility{
     private int areaInSqm;

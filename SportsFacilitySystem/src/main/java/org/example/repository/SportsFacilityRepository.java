@@ -1,6 +1,6 @@
-package repository;
+package org.example.repository;
 
-import model.SportsFacility;
+import org.example.model.SportsFacility;
 
 import java.util.List;
 import java.util.Optional;

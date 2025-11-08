@@ -1,4 +1,4 @@
-package model;
+package org.example.model;
 
 public class SwimmingPool extends SportsFacility{
     private int poolLength;

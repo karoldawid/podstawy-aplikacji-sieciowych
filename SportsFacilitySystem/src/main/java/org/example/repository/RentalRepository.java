@@ -1,6 +1,6 @@
-package repository;
+package org.example.repository;
 
-import model.Rental;
+import org.example.model.Rental;
 
 import java.util.List;
 import java.util.Optional;
