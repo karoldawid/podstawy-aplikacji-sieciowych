@@ -1,5 +1,9 @@
 package org.example.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 import java.util.UUID;
 
 // Na PAS bedzie abstrakcyjny User, a dziewdziczyć będzie Admin, FacilityManager, Client
@@ -9,7 +13,10 @@ public class User {
     private String firstName;
     private String lastName;
     private boolean isActive;
+    @NotBlank(message = "Login jest wymagany")
+    @Size(min = 3, max = 50, message = "Login musi miec od 3 do 50 znaków")
     private String login;
+    @NotEmpty(message = "Rola użytkownika jest wymagana")
     private Role role;
 
     public User() {

@@ -11,4 +11,6 @@ public interface UserRepository {
     Optional<User> findById(UUID id);
     List<User> findAll();
     void deleteById(UUID id);
+    Optional<User> findByLogin(String login);
+    List<User> findByLoginContaining(String loginFragment);
 }
