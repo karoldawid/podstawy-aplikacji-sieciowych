@@ -1,13 +1,13 @@
-package mckd.sportsfacilitysystem;
+package pas06.restsfs;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SportsfacilitysystemApplicationTests {
+class RestSfsApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
