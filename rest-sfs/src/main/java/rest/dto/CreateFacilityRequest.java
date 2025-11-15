@@ -1,10 +1,27 @@
 package rest.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public class CreateFacilityRequest {
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String name;
+
+    @NotNull
+    @Positive
     private double pricePerHour;
+
+    @NotNull
+    @Positive
     private int capacity;
+
+    @NotBlank
+    @Size(min = 3, max = 14)
     private String facilityType;
+
     private Integer areaInSqm;
     private Boolean hasSauna;
     private String surfaceType;

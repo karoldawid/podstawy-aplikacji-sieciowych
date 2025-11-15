@@ -1,5 +1,6 @@
 package rest;
 
+import jakarta.validation.Valid;
 import model.Gym;
 import model.SportsFacility;
 import model.SwimmingPool;
@@ -33,12 +34,12 @@ public class SportsFacilityRestController {
     }
 
     @PostMapping("/create")
-    public SportsFacility createFacility(@RequestBody CreateFacilityRequest request) throws Exception {
+    public SportsFacility createFacility(@Valid @RequestBody CreateFacilityRequest request) throws Exception {
         return sportsFacilityService.createFacilityFromDTO(request);
     }
 
     @PutMapping("/{facilityId}")
-    public SportsFacility updateFacility(@PathVariable UUID facilityId, @RequestBody UpdateFacilityRequest request) throws Exception {
+    public SportsFacility updateFacility(@PathVariable UUID facilityId, @Valid @RequestBody UpdateFacilityRequest request) throws Exception {
         return sportsFacilityService.updateFacility(facilityId, request);
     }
 

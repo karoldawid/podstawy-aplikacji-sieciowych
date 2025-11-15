@@ -1,7 +1,15 @@
 package rest.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class UpdateUserRequest {
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String firstName;
+
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String lastName;
 
     public UpdateUserRequest(String firstName, String lastName) {

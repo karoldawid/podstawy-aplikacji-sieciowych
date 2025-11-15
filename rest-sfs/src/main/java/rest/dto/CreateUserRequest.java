@@ -1,9 +1,23 @@
 package rest.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CreateUserRequest {
+    @NotBlank
+    @Size(min = 4, max = 20)
     private String login;
+
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String firstName;
+
+    @NotBlank
+    @Size(min = 4, max = 20)
     private String lastName;
+
+    @NotBlank
+    @Size(min = 5, max = 7)
     private String userType;
 
     public CreateUserRequest(String login, String firstName, String lastName, String userType) {

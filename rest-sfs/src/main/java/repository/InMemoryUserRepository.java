@@ -1,16 +1,15 @@
 package repository;
 
-import lombok.val;
 import model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
-    private final HashMap<UUID, User> users = new HashMap<>();
-    // rozważyć ConcurrentHashMap do obsługi wielowątkowości
+    private final ConcurrentHashMap<UUID, User> users = new ConcurrentHashMap<>();
 
     @Override
     public User save(User user) {

@@ -78,4 +78,14 @@ public class RentalServiceImpl implements RentalService{
     public List<Rental> getRentalsForFacility(UUID facilityId) {
         return rentalRepository.findByFacilityId(facilityId);
     }
+// TODO
+    @Override
+    public List<Rental> getPastRentalsForClient(UUID clientId) {
+        return null;
+    }
+// TODO
+    @Override
+    public List<Rental> getCurrentRentalsForClient(UUID clientId) {
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package rest;
 
+import jakarta.validation.Valid;
 import model.Admin;
 import model.Client;
 import model.FacilityManager;
@@ -53,12 +54,12 @@ public class UserRestController {
     }
 
     @PostMapping("/create")
-    public User createUser(@RequestBody CreateUserRequest request) throws Exception {
+    public User createUser(@Valid @RequestBody CreateUserRequest request) throws Exception {
         return userService.createUserFromDTO(request);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequest request) throws Exception{
+    public User updateUser(@PathVariable UUID id, @Valid @RequestBody UpdateUserRequest request) throws Exception{
         return userService.updateUser(id, request);
     }
 

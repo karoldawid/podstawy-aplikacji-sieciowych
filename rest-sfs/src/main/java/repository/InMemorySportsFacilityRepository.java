@@ -4,10 +4,11 @@ import model.SportsFacility;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class InMemorySportsFacilityRepository implements SportsFacilityRepository{
-    private HashMap<UUID, SportsFacility> facilities =  new HashMap<>();
+    private final ConcurrentHashMap<UUID, SportsFacility> facilities =  new ConcurrentHashMap<>();
 
     @Override
     public SportsFacility save(SportsFacility sportsFacility) {
