@@ -1,9 +1,11 @@
-package pas06.restsfs.repository;
+package repository;
 
 import model.SportsFacility;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
 public class InMemorySportsFacilityRepository implements SportsFacilityRepository{
     private HashMap<UUID, SportsFacility> facilities =  new HashMap<>();
 

@@ -1,4 +1,4 @@
-package pas06.restsfs.model;
+package model;
 
 public class TennisCourt extends SportsFacility{
 

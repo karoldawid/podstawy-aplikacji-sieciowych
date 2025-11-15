@@ -1,4 +1,4 @@
-package pas06.restsfs.service;
+package service;
 
 import model.Rental;
 

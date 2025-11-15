@@ -1,10 +1,12 @@
-package pas06.restsfs.repository;
+package repository;
 
 import model.Rental;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Repository
 public class InMemoryRentalRepository implements RentalRepository{
     private HashMap<UUID, Rental> rentals = new HashMap<>();
     @Override

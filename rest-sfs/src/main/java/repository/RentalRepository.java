@@ -1,4 +1,4 @@
-package pas06.restsfs.repository;
+package repository;
 
 import model.Rental;
 

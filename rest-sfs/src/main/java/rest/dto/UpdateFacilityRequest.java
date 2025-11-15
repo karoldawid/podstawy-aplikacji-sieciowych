@@ -1,26 +1,14 @@
-package pas06.restsfs.model;
+package rest.dto;
 
-import java.util.UUID;
-
-public abstract class SportsFacility {
-    private UUID id;
+public class UpdateFacilityRequest {
     private String name;
     private double pricePerHour;
     private int capacity;
 
-    public SportsFacility(String name, double pricePerHour, int capacity) {
-        this.id = UUID.randomUUID();
+    public UpdateFacilityRequest(String name, double pricePerHour, int capacity) {
         this.name = name;
         this.pricePerHour = pricePerHour;
         this.capacity = capacity;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -45,14 +33,5 @@ public abstract class SportsFacility {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-    }
-
-    @Override
-    public String toString() {
-        return  "id=" + id +
-                ", name='" + name + '\'' +
-                ", pricePerHour=" + pricePerHour + '\'' +
-                ", capacity='" + capacity +
-                '}';
     }
 }

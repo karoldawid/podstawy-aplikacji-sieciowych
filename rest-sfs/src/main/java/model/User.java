@@ -1,27 +1,26 @@
-package pas06.restsfs.model;
+package model;
 
 import java.util.UUID;
 
-// Na PAS bedzie abstrakcyjny User, a dziewdziczyć będzie Admin, FacilityManager, Client
-public class Client {
+public abstract class User {
     private UUID id;
     private String firstName;
     private String lastName;
-    // boolean isActive;
-    // jeszcze login
+    boolean isActive;
+    String login;
 
-    public Client() {
-    }
-
-    public Client(String firstName, String lastName) {
+    public User(String login, String firstName, String lastName) {
         this.id = UUID.randomUUID();
+        this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isActive = false;
     }
 
-    public UUID getId() {
-        return id;
+    public User() {
     }
+
+    public UUID getId() { return id; }
 
     public void setId(UUID id) {
         this.id = id;
@@ -43,12 +42,31 @@ public class Client {
         this.lastName = lastName;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     @Override
     public String toString() {
-        return "Client{" +
-                "id=" + id +
+        return "User{" +
+                "login= " + login +
+                ", id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", isActive='" + isActive + '\'' +
                 '}';
     }
+
 }

@@ -1,9 +1,11 @@
-package pas06.restsfs.service;
+package service;
 
 import model.Client;
+import model.User;
 import model.Rental;
 import model.SportsFacility;
-import repository.ClientRepository;
+import org.springframework.stereotype.Service;
+import repository.UserRepository;
 import repository.RentalRepository;
 import repository.SportsFacilityRepository;
 
@@ -11,13 +13,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class RentalServiceImpl implements RentalService{
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
     private final SportsFacilityRepository sportsFacilityRepository;
     private final RentalRepository rentalRepository;
 
-    public RentalServiceImpl(ClientRepository clientRepository, SportsFacilityRepository sportsFacilityRepository, RentalRepository rentalRepository){
-        this.clientRepository = clientRepository;
+    public RentalServiceImpl(UserRepository userRepository, SportsFacilityRepository sportsFacilityRepository, RentalRepository rentalRepository){
+        this.userRepository = userRepository;
         this.sportsFacilityRepository = sportsFacilityRepository;
         this.rentalRepository = rentalRepository;
     }
@@ -31,7 +34,16 @@ public class RentalServiceImpl implements RentalService{
             throw new RentalException("Nie da się wypożyczyć wstecz");
         }
 
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> new RentalException("Klient o ID: " + clientId + " nie istnieje."));
+        User user = userRepository.findById(clientId).orElseThrow(() -> new RentalException("Użytkownik o ID: " + clientId + " nie istnieje."));
+
+        if (!(user instanceof Client)){
+            throw new RentalException("Użytkownik o ID: " + clientId + " nie jest klientem.");
+        }
+
+        if (!user.isActive()){
+            throw new RentalException("Klient o ID: " + clientId + " nie jest aktywny.");
+        }
+
         SportsFacility sportsFacility = sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new RentalException("Obiekt sportowy o ID: " + facilityId + " nie istnieje."));
 
         // na PAS trzeba sprawdzić czy klient jest aktywny

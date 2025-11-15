@@ -1,4 +1,4 @@
-package pas06.restsfs;
+package main.restsfs;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
