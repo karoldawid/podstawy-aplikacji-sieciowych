@@ -1,0 +1,26 @@
+GET http://localhost:8080/api/v1/users
+###
+GET http://localhost:8080/api/v1/facilities
+###
+POST http://localhost:8080/api/v1/facilities/create
+Content-Type: application/json
+
+{
+  "name": "Kort Centralny",
+  "pricePerHour": 120.0,
+  "capacity": 4,
+  "facilityType": "TENNIS_COURT",
+  "surfaceType": "CLAY",
+  "isIndoor": true
+}
+
+###
+POST http://localhost:8080/api/v1/users/create
+Content-Type: application/json
+
+{
+  "login": "",
+  "firstName": "Jan",
+  "lastName": "Kowalski",
+  "userType": "CLIENT"
+}
