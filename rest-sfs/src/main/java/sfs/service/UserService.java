@@ -11,11 +11,11 @@ import java.util.UUID;
 public interface UserService {
     User createUser(User user) throws Exception;
     User createUserFromDTO(CreateUserRequest request) throws Exception;
-    User updateUser(UUID id, UpdateUserRequest request) throws Exception;
-    User getUserById(UUID id) throws Exception;
+    User updateUser(String id, UpdateUserRequest request) throws Exception;
+    User getUserById(String id) throws Exception;
     List<User> getAllUsers();
-    User activateUser(UUID id) throws Exception;
-    User deactivateUser(UUID id) throws Exception;
+    User activateUser(String id) throws Exception;
+    User deactivateUser(String id) throws Exception;
     User findUserByLogin(String login) throws Exception;
     List<User> findUserByLoginFragment(String loginFragment) throws Exception;
 }

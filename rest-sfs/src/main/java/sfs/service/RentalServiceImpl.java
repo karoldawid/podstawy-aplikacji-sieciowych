@@ -29,7 +29,7 @@ public class RentalServiceImpl implements RentalService{
     }
 
     @Override
-    public Rental rentFacility(UUID clientId, UUID facilityId, LocalDateTime startTime, LocalDateTime endTime) throws RentalException {
+    public Rental rentFacility(String clientId, String facilityId, LocalDateTime startTime, LocalDateTime endTime) throws RentalException {
         if (startTime.isAfter(endTime) || startTime.isEqual(endTime)) {
             throw new RentalException("Czas rozpoczęcia wypożyczenia obiektu musi być przed czasem zakończenia");
         }
@@ -59,7 +59,7 @@ public class RentalServiceImpl implements RentalService{
     }
 
     @Override
-    public boolean isFacilityAvailable(UUID facilityId, LocalDateTime startTime, LocalDateTime endTime) {
+    public boolean isFacilityAvailable(String facilityId, LocalDateTime startTime, LocalDateTime endTime) {
         List<Rental> existingRentals = rentalRepository.findByFacilityId(facilityId);
 
         for(Rental existing : existingRentals){
@@ -71,50 +71,38 @@ public class RentalServiceImpl implements RentalService{
     }
 
     @Override
-    public List<Rental> getRentalsForClient(UUID clientId) {
+    public List<Rental> getRentalsForClient(String clientId) {
         return rentalRepository.findByClientId(clientId);
     }
 
     @Override
-    public List<Rental> getRentalsForFacility(UUID facilityId) {
+    public List<Rental> getRentalsForFacility(String facilityId) {
         return rentalRepository.findByFacilityId(facilityId);
     }
 
     @Override
-    public List<Rental> getPastRentalsForClient(UUID clientId) {
-         return rentalRepository.findByClientId(clientId)
-                 .stream()
-                 .filter(rental -> rental.getEndTime() != null && rental.getEndTime().isBefore(LocalDateTime.now()))
-                 .collect(Collectors.toList());
+    public List<Rental> getPastRentalsForClient(String clientId) {
+        return rentalRepository.findPastByClientId(clientId, LocalDateTime.now());
     }
 
     @Override
-    public List<Rental> getCurrentRentalsForClient(UUID clientId) {
-        return rentalRepository.findByClientId(clientId)
-                .stream()
-                .filter(rental -> rental.getEndTime() == null || rental.getEndTime().isAfter(LocalDateTime.now()))
-                .collect(Collectors.toList());
+    public List<Rental> getCurrentRentalsForClient(String clientId) {
+        return rentalRepository.findCurrentByClientId(clientId, LocalDateTime.now());
     }
 
     @Override
-    public List<Rental> getPastRentalsForFacility(UUID facilityId) {
-        return rentalRepository.findByFacilityId(facilityId)
-                .stream()
-                .filter(rental -> rental.getEndTime() != null && rental.getEndTime().isBefore(LocalDateTime.now()))
-                .collect(Collectors.toList());
+    public List<Rental> getPastRentalsForFacility(String facilityId) {
+        return rentalRepository.findPastByFacilityId(facilityId, LocalDateTime.now());
     }
 
     @Override
-    public List<Rental> getCurrentRentalsForFacility(UUID facilityId) {
-        return rentalRepository.findByFacilityId(facilityId)
-                .stream()
-                .filter(rental -> rental.getEndTime() == null || rental.getEndTime().isAfter(LocalDateTime.now()))
-                .collect(Collectors.toList());
+    public List<Rental> getCurrentRentalsForFacility(String facilityId) {
+        return rentalRepository.findCurrentByFacilityId(facilityId, LocalDateTime.now());
     }
 
     // zakończenie alokacji polega na ustawieniu atrybutu czasu zakończenia alokacji
     @Override
-    public Rental endRental(UUID id) throws RentalException {
+    public Rental endRental(String id) throws RentalException {
         Rental rental =  rentalRepository.findById(id).orElseThrow(() -> new RentalException("Nie znaleziono rezerwacji o ID: " + id));
         rental.setEndTime(LocalDateTime.now());
         return rentalRepository.save(rental);
@@ -122,7 +110,7 @@ public class RentalServiceImpl implements RentalService{
 
     // usuwanie alokacji dotyczy tylko alokacji nie zakończonych
     @Override
-    public void deleteRental(UUID id) throws RentalException {
+    public void deleteRental(String id) throws RentalException {
         Rental rental = rentalRepository.findById(id).orElseThrow(() -> new RentalException("Wypożyczenie o ID: " + id + " nie istnieje."));
 
         if (rental.getEndTime() != null && rental.getEndTime().isBefore(LocalDateTime.now())) {

@@ -4,28 +4,37 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsEqual.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 class RestSfsApplicationTests {
 
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+
+        mongoTemplate.dropCollection("users");
+        mongoTemplate.dropCollection("facilities");
+        mongoTemplate.dropCollection("rentals");
+
+        Index uniqueLoginIndex = new Index().on("login", Sort.Direction.ASC).unique();
+        mongoTemplate.indexOps("users").createIndex(uniqueLoginIndex);
     }
 
     @Test
@@ -43,8 +52,7 @@ class RestSfsApplicationTests {
                 }
                 """;
 
-        // CREATE
-        String newUserIdString = given()
+        String newUserId = given()
                 .contentType(ContentType.JSON)
                 .body(userJson)
                 .when()
@@ -54,9 +62,8 @@ class RestSfsApplicationTests {
                 .extract()
                 .path("id");
 
-        UUID newUserId = UUID.fromString(newUserIdString);
+        assertNotNull(newUserId);
 
-        // READ
         given()
                 .when()
                 .get("/api/v1/users/{id}", newUserId)
@@ -66,7 +73,6 @@ class RestSfsApplicationTests {
                 .body("firstName", equalTo("Milka"))
                 .body("lastName", equalTo("Maltanka"));
 
-        //UPDATE
         String updateUserJson = """
         {
             "firstName": "Miśka",
@@ -93,7 +99,6 @@ class RestSfsApplicationTests {
 
     @Test
     void shouldCRUDFacility() {
-        // CREATE
         String facilityJson = """
             {
                 "name": "Siłownia Błysk",
@@ -105,7 +110,7 @@ class RestSfsApplicationTests {
             }
         """;
 
-        String newFacilityIdString = given()
+        String newFacilityId = given()
                 .contentType(ContentType.JSON)
                 .body(facilityJson)
                 .when()
@@ -115,9 +120,8 @@ class RestSfsApplicationTests {
                 .extract()
                 .path("id");
 
-        UUID newFacilityId = UUID.fromString(newFacilityIdString);
+        assertNotNull(newFacilityId);
 
-        // READ
         given()
                 .when()
                 .get("/api/v1/facilities/{id}", newFacilityId)
@@ -126,7 +130,6 @@ class RestSfsApplicationTests {
                 .body("name", equalTo("Siłownia Błysk"))
                 .body("areaInSqm", equalTo(300));
 
-        // UPDATE
         String updateFacilityJson = """
             {
                 "name": "Siłownia Po Remoncie",
@@ -145,7 +148,6 @@ class RestSfsApplicationTests {
                 .body("name", equalTo("Siłownia Po Remoncie"))
                 .body("capacity", equalTo(60));
 
-        // DELETE
         given()
                 .when()
                 .delete("/api/v1/facilities/{id}", newFacilityId)
@@ -165,11 +167,11 @@ class RestSfsApplicationTests {
         String clientJson = """
             { "login": "testclient", "firstName": "Test", "lastName": "Client", "userType": "CLIENT" }
         """;
-        UUID clientId = UUID.fromString(given()
+        String clientId = given()
                 .contentType(ContentType.JSON)
                 .body(clientJson)
                 .when().post("/api/v1/users/create")
-                .then().statusCode(200).extract().path("id"));
+                .then().statusCode(200).extract().path("id");
 
         given()
                 .when().put("/api/v1/users/activate/{id}", clientId)
@@ -178,11 +180,11 @@ class RestSfsApplicationTests {
         String facilityJson = """
             { "name": "Kort do Rezerwacji", "pricePerHour": 100, "capacity": 4, "facilityType": "TENNIS_COURT", "surfaceType": "CLAY", "isIndoor": true }
         """;
-        UUID facilityId = UUID.fromString(given()
+        String facilityId = given()
                 .contentType(ContentType.JSON)
                 .body(facilityJson)
                 .when().post("/api/v1/facilities/create")
-                .then().statusCode(200).extract().path("id"));
+                .then().statusCode(200).extract().path("id");
 
         String rentalJson = String.format("""
         {
@@ -201,7 +203,7 @@ class RestSfsApplicationTests {
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
-                .body("clientId", equalTo(clientId.toString()));
+                .body("clientId", equalTo(clientId));
     }
 
     @Test
@@ -272,11 +274,11 @@ class RestSfsApplicationTests {
         String clientJson = """
             { "login": "renter", "firstName": "Test", "lastName": "Renter", "userType": "CLIENT" }
         """;
-        UUID clientId = UUID.fromString(given()
+        String clientId = given()
                 .contentType(ContentType.JSON)
                 .body(clientJson)
                 .when().post("/api/v1/users/create")
-                .then().statusCode(200).extract().path("id"));
+                .then().statusCode(200).extract().path("id");
 
         given()
                 .when().put("/api/v1/users/activate/{id}", clientId)
@@ -285,11 +287,11 @@ class RestSfsApplicationTests {
         String facilityJson = """
             { "name": "Kort Do Konfliktu", "pricePerHour": 100, "capacity": 4, "facilityType": "TENNIS_COURT", "surfaceType": "HARD", "isIndoor": false }
         """;
-        UUID facilityId = UUID.fromString(given()
+        String facilityId = given()
                 .contentType(ContentType.JSON)
                 .body(facilityJson)
                 .when().post("/api/v1/facilities/create")
-                .then().statusCode(200).extract().path("id"));
+                .then().statusCode(200).extract().path("id");
 
         String rentalJson = String.format("""
         {

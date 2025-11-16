@@ -21,7 +21,7 @@ public class SportsFacilityRestController {
     }
 
     @GetMapping("/{facilityId}")
-    public SportsFacility getFacilityById(@PathVariable UUID facilityId) throws Exception {
+    public SportsFacility getFacilityById(@PathVariable String facilityId) throws Exception {
         return sportsFacilityService.getFacilityById(facilityId);
     }
 
@@ -36,12 +36,12 @@ public class SportsFacilityRestController {
     }
 
     @PutMapping("/{facilityId}")
-    public SportsFacility updateFacility(@PathVariable UUID facilityId, @Valid @RequestBody UpdateFacilityRequest request) throws Exception {
+    public SportsFacility updateFacility(@PathVariable String facilityId, @Valid @RequestBody UpdateFacilityRequest request) throws Exception {
         return sportsFacilityService.updateFacility(facilityId, request);
     }
 
     @DeleteMapping("/{facilityId}")
-    public void deleteFacility(@PathVariable UUID facilityId) throws Exception {
+    public void deleteFacility(@PathVariable String facilityId) throws Exception {
         sportsFacilityService.deleteFacility(facilityId);
     }
 

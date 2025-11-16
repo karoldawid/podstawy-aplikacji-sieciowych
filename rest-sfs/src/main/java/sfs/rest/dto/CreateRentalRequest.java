@@ -10,9 +10,9 @@ import java.util.UUID;
 
 public class CreateRentalRequest {
     @NotNull
-    private UUID facilityId;
+    private String facilityId;
     @NotNull
-    private UUID clientId;
+    private String clientId;
     @NotNull
     @FutureOrPresent
     private LocalDateTime startTime;
@@ -23,28 +23,44 @@ public class CreateRentalRequest {
     public CreateRentalRequest() {
     }
 
-    public CreateRentalRequest(UUID facilityId, UUID clientId, LocalDateTime startTime, LocalDateTime endTime) {
+    public CreateRentalRequest(String facilityId, String clientId, LocalDateTime startTime, LocalDateTime endTime) {
         this.facilityId = facilityId;
         this.clientId = clientId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public UUID getFacilityId() {
+    public String getFacilityId() {
         return facilityId;
     }
 
-    public void setFacilityId(UUID facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
 
-    public UUID getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(UUID clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
+
+    //    public UUID getFacilityId() {
+//        return facilityId;
+//    }
+//
+//    public void setFacilityId(UUID facilityId) {
+//        this.facilityId = facilityId;
+//    }
+//
+//    public UUID getClientId() {
+//        return clientId;
+//    }
+//
+//    public void setClientId(UUID clientId) {
+//        this.clientId = clientId;
+//    }
 
     public LocalDateTime getStartTime() {
         return startTime;

@@ -21,7 +21,7 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable UUID id) throws Exception {
+    public User getUserById(@PathVariable String id) throws Exception {
         return userService.getUserById(id);
     }
 
@@ -31,12 +31,12 @@ public class UserRestController {
     }
 
     @PutMapping("/activate/{id}")
-    public User activateUser(@PathVariable UUID id) throws Exception {
+    public User activateUser(@PathVariable String id) throws Exception {
         return userService.activateUser(id);
     }
 
     @PutMapping("/deactivate/{id}")
-    public User deactivateUser(@PathVariable UUID id) throws Exception {
+    public User deactivateUser(@PathVariable String id) throws Exception {
         return userService.deactivateUser(id);
     }
 
@@ -56,7 +56,7 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable UUID id, @Valid @RequestBody UpdateUserRequest request) throws Exception{
+    public User updateUser(@PathVariable String id, @Valid @RequestBody UpdateUserRequest request) throws Exception{
         return userService.updateUser(id, request);
     }
 

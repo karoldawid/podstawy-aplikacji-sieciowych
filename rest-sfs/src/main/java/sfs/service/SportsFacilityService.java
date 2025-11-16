@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public interface SportsFacilityService {
     SportsFacility createFacilityFromDTO(CreateFacilityRequest request) throws Exception;
-    SportsFacility updateFacility(UUID id, UpdateFacilityRequest request) throws Exception;
-    SportsFacility getFacilityById(UUID facilityId) throws Exception;
+    SportsFacility updateFacility(String id, UpdateFacilityRequest request) throws Exception;
+    SportsFacility getFacilityById(String facilityId) throws Exception;
     List<SportsFacility> getAllFacilities();
-    void deleteFacility(UUID facilityId) throws Exception;
+    void deleteFacility(String facilityId) throws Exception;
 }

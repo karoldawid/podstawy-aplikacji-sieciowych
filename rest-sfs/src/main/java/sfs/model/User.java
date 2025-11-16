@@ -1,9 +1,14 @@
 package sfs.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.UUID;
 
+@Document(collection = "users")
 public abstract class User {
-    private UUID id;
+    @Id
+    private String id;
     private String firstName;
     private String lastName;
     boolean isActive;
@@ -19,11 +24,19 @@ public abstract class User {
     public User() {
     }
 
-    public UUID getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
+
+    //    public UUID getId() { return id; }
+//
+//    public void setId(UUID id) {
+//        this.id = id;
+//    }
 
     public String getFirstName() {
         return firstName;

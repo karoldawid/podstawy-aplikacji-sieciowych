@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RentalService {
-    Rental rentFacility(UUID clientId, UUID facilityId, LocalDateTime startTime, LocalDateTime endTime)
+    Rental rentFacility(String clientId, String facilityId, LocalDateTime startTime, LocalDateTime endTime)
             throws RentalException;
-    boolean isFacilityAvailable(UUID facilityId, LocalDateTime startTime, LocalDateTime endTime);
+    boolean isFacilityAvailable(String facilityId, LocalDateTime startTime, LocalDateTime endTime);
 
-    List<Rental> getRentalsForFacility(UUID facilityId);
-    List<Rental> getRentalsForClient(UUID clientId);
-    List<Rental> getPastRentalsForClient(UUID clientId);
-    List<Rental> getCurrentRentalsForClient(UUID clientId);
-    List<Rental> getPastRentalsForFacility(UUID facilityId);
-    List<Rental> getCurrentRentalsForFacility(UUID facilityId);
+    List<Rental> getRentalsForFacility(String facilityId);
+    List<Rental> getRentalsForClient(String clientId);
+    List<Rental> getPastRentalsForClient(String clientId);
+    List<Rental> getCurrentRentalsForClient(String clientId);
+    List<Rental> getPastRentalsForFacility(String facilityId);
+    List<Rental> getCurrentRentalsForFacility(String facilityId);
 
-    Rental endRental(UUID id) throws RentalException;
-    void deleteRental(UUID id) throws RentalException;
+    Rental endRental(String id) throws RentalException;
+    void deleteRental(String id) throws RentalException;
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface SportsFacilityRepository {
     SportsFacility save(SportsFacility sportsFacility);
-    Optional<SportsFacility> findById(UUID id);
+    Optional<SportsFacility> findById(String id);
     List<SportsFacility> findAll();
-    void deleteById(UUID id);
+    void deleteById(String id);
 }

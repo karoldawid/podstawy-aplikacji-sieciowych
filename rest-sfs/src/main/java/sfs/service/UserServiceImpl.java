@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User updateUser(UUID id, UpdateUserRequest request) throws Exception {
+    public User updateUser(String id, UpdateUserRequest request) throws Exception {
         User user = getUserById(id);
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserById(UUID id) throws Exception {
+    public User getUserById(String id) throws Exception {
         return userRepository.findById(id).orElseThrow(() -> new Exception("Nie znaleziona użytkownika o ID: " + id));
     }
 
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User activateUser(UUID id) throws Exception {
+    public User activateUser(String id) throws Exception {
         User user = getUserById(id);
         if(user.isActive()){
             throw new Exception("Użytkownik o ID: " + user.getId() + " już został aktywowany.");
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User deactivateUser(UUID id) throws Exception {
+    public User deactivateUser(String id) throws Exception {
         User user = getUserById(id);
         if(!user.isActive()){
             throw new Exception("Użytkownik o ID: " + user.getId() + " już był nieaktywny.");

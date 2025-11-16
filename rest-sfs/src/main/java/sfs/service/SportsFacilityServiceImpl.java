@@ -74,7 +74,7 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
     }
 
     @Override
-    public SportsFacility updateFacility(UUID facilityId, UpdateFacilityRequest request) throws Exception {
+    public SportsFacility updateFacility(String facilityId, UpdateFacilityRequest request) throws Exception {
         SportsFacility sportsFacility = getFacilityById(facilityId);
         sportsFacility.setName(request.getName());
         sportsFacility.setPricePerHour(request.getPricePerHour());
@@ -83,7 +83,7 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
     }
 
     @Override
-    public SportsFacility getFacilityById(UUID facilityId) throws Exception {
+    public SportsFacility getFacilityById(String facilityId) throws Exception {
         return sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new Exception("Nie udało się znaleźć obiektu o ID: " + facilityId + "."));
     }
 
@@ -93,7 +93,7 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
     }
 
     @Override
-    public void deleteFacility(UUID facilityId) throws Exception {
+    public void deleteFacility(String facilityId) throws Exception {
         if (sportsFacilityRepository.findById(facilityId).isEmpty()){
             throw new Exception("Obiekt sportowy o ID: " + facilityId + " nie istnieje, więc nie można go usunąć.");
         }

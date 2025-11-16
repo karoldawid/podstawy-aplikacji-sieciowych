@@ -20,15 +20,13 @@ public class RentalRestController {
         this.rentalService = rentalService;
     }
 
-    // GET http://localhost:8080/api/v1/rentals/facility/{jakiś-UUID}
     @GetMapping("/facility/{facilityId}")
-    public List<Rental> getRentalsForFacility(@PathVariable UUID facilityId){
+    public List<Rental> getRentalsForFacility(@PathVariable String facilityId){
         return rentalService.getRentalsForFacility(facilityId);
     }
 
-    // GET http://localhost:8080/api/v1/rentals/clients/{UUID}
     @GetMapping("/client/{clientId}")
-    public List<Rental> getRentalsForClient(@PathVariable UUID clientId){
+    public List<Rental> getRentalsForClient(@PathVariable String clientId){
         return rentalService.getRentalsForClient(clientId);
     }
 
@@ -38,32 +36,32 @@ public class RentalRestController {
     }
 
     @GetMapping("/client/past/{clientId}")
-    public List<Rental> getPastRentalsForClient(@PathVariable UUID clientId) {
+    public List<Rental> getPastRentalsForClient(@PathVariable String clientId) {
         return rentalService.getPastRentalsForClient(clientId);
     }
 
     @GetMapping("/client/current/{clientId}")
-    public List<Rental> getCurrentRentalsForClient(@PathVariable UUID clientId) {
+    public List<Rental> getCurrentRentalsForClient(@PathVariable String clientId) {
         return rentalService.getCurrentRentalsForClient(clientId);
     }
 
     @GetMapping("/facility/past/{facilityId}")
-    public List<Rental> getPastRentalsForFacility(@PathVariable UUID facilityId) {
+    public List<Rental> getPastRentalsForFacility(@PathVariable String facilityId) {
         return rentalService.getPastRentalsForFacility(facilityId);
     }
 
     @GetMapping("/facility/current/{facilityId}")
-    public List<Rental> getCurrentRentalsForFacility(@PathVariable UUID facilityId) {
+    public List<Rental> getCurrentRentalsForFacility(@PathVariable String facilityId) {
         return rentalService.getCurrentRentalsForFacility(facilityId);
     }
 
     @PutMapping("/finish/{id}")
-    public Rental endRental(@PathVariable UUID id) throws RentalException {
+    public Rental endRental(@PathVariable String id) throws RentalException {
         return rentalService.endRental(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRental(@PathVariable UUID id) throws RentalException {
+    public void deleteRental(@PathVariable String id) throws RentalException {
         rentalService.deleteRental(id);
     }
 }
