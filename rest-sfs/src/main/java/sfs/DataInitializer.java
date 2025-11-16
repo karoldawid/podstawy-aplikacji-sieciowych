@@ -3,8 +3,11 @@ package sfs;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.CollectionOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.schema.JsonSchemaProperty;
+import org.springframework.data.mongodb.core.schema.MongoJsonSchema;
 import org.springframework.stereotype.Component;
 import sfs.model.SportsFacility;
 import sfs.model.User;
@@ -42,9 +45,41 @@ public class DataInitializer implements CommandLineRunner {
         mongoTemplate.dropCollection("facilities");
         mongoTemplate.dropCollection("rentals");
 
+        MongoJsonSchema userSchema = MongoJsonSchema.builder()
+                .required("login", "firstName", "lastName")
+                .properties(
+                        JsonSchemaProperty.string("login").minLength(4).maxLength(20),
+                        JsonSchemaProperty.string("firstName").minLength(3).maxLength(20),
+                        JsonSchemaProperty.string("lastName").minLength(4).maxLength(20)
+                )
+                .build();
+        mongoTemplate.createCollection("users", CollectionOptions.empty().schema(userSchema));
+
         mongoTemplate.indexOps("users").createIndex(
                 new Index().on("login", Sort.Direction.ASC).unique()
         );
+
+        MongoJsonSchema facilitySchema = MongoJsonSchema.builder()
+                .required("name", "pricePerHour", "capacity")
+                .properties(
+                        JsonSchemaProperty.string("name").minLength(3).maxLength(20),
+                        JsonSchemaProperty.float64("pricePerHour").gte(0.0),
+                        JsonSchemaProperty.int32("capacity").gte(1)
+                )
+                .build();
+        mongoTemplate.createCollection("facilities", CollectionOptions.empty().schema(facilitySchema));
+
+        MongoJsonSchema rentalSchema = MongoJsonSchema.builder()
+                .required("clientId", "facilityId", "startTime", "endTime")
+                .properties(
+                        JsonSchemaProperty.string("clientId").minLength(1),
+                        JsonSchemaProperty.string("facilityId").minLength(1),
+                        JsonSchemaProperty.date("startTime"),
+                        JsonSchemaProperty.date("endTime")
+                )
+                .build();
+        mongoTemplate.createCollection("rentals", CollectionOptions.empty().schema(rentalSchema));
+
 
         SportsFacility gym1 = sportsFacilityService.createFacilityFromDTO(
                 new CreateFacilityRequest(
