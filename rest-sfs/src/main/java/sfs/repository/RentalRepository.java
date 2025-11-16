@@ -2,6 +2,7 @@ package sfs.repository;
 
 import sfs.model.Rental;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,4 +15,9 @@ public interface RentalRepository {
 
     List<Rental> findByClientId(UUID clientId);
     List<Rental> findByFacilityId(UUID facilityId);
+
+List<Rental> findPastByClientId(UUID clientId, LocalDateTime now);
+List<Rental> findCurrentByClientId(UUID clientId, LocalDateTime now);
+List<Rental> findPastByFacilityId(UUID facilityId, LocalDateTime now);
+List<Rental> findCurrentByFacilityId(UUID facilityId, LocalDateTime now);
 }

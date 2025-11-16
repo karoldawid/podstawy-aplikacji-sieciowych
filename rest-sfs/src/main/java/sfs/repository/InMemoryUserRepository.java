@@ -12,7 +12,7 @@ public class InMemoryUserRepository implements UserRepository {
     private final ConcurrentHashMap<UUID, User> users = new ConcurrentHashMap<>();
 
     @Override
-    public User save(User user) {
+    public synchronized User save(User user) {
         Optional<User> existing = findByLogin(user.getLogin());
         if (existing.isPresent() && (user.getId() == null || !existing.get().getId().equals(user.getId()))) {
             throw new RuntimeException("Login " + user.getLogin() + " już istnieje i jest zajęty.");

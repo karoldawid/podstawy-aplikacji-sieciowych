@@ -82,34 +82,22 @@ public class RentalServiceImpl implements RentalService{
 
     @Override
     public List<Rental> getPastRentalsForClient(UUID clientId) {
-         return rentalRepository.findByClientId(clientId)
-                 .stream()
-                 .filter(rental -> rental.getEndTime() != null && rental.getEndTime().isBefore(LocalDateTime.now()))
-                 .collect(Collectors.toList());
+        return rentalRepository.findPastByClientId(clientId, LocalDateTime.now());
     }
 
     @Override
     public List<Rental> getCurrentRentalsForClient(UUID clientId) {
-        return rentalRepository.findByClientId(clientId)
-                .stream()
-                .filter(rental -> rental.getEndTime() == null || rental.getEndTime().isAfter(LocalDateTime.now()))
-                .collect(Collectors.toList());
+        return rentalRepository.findCurrentByClientId(clientId, LocalDateTime.now());
     }
 
     @Override
     public List<Rental> getPastRentalsForFacility(UUID facilityId) {
-        return rentalRepository.findByFacilityId(facilityId)
-                .stream()
-                .filter(rental -> rental.getEndTime() != null && rental.getEndTime().isBefore(LocalDateTime.now()))
-                .collect(Collectors.toList());
+        return rentalRepository.findPastByFacilityId(facilityId, LocalDateTime.now());
     }
 
     @Override
     public List<Rental> getCurrentRentalsForFacility(UUID facilityId) {
-        return rentalRepository.findByFacilityId(facilityId)
-                .stream()
-                .filter(rental -> rental.getEndTime() == null || rental.getEndTime().isAfter(LocalDateTime.now()))
-                .collect(Collectors.toList());
+        return rentalRepository.findCurrentByFacilityId(facilityId, LocalDateTime.now());
     }
 
     // zakończenie alokacji polega na ustawieniu atrybutu czasu zakończenia alokacji
