@@ -1,12 +1,5 @@
 package sfs.service;
 
-// CRUD
-// W metodzie deleteFacility(UUID facilityId)
-// musisz wstrzyknąć RentalRepository i sprawdzić,
-// czy rentalRepository.findByFacilityId(facilityId)
-// jest puste. Jeśli nie jest, musisz rzucić wyjątek
-// (nie można usunąć zasobu z rezerwacjami).
-
 import sfs.model.SportsFacility;
 import sfs.rest.dto.CreateFacilityRequest;
 import sfs.rest.dto.UpdateFacilityRequest;
