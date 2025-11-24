@@ -11,8 +11,7 @@ import org.springframework.data.mongodb.core.schema.MongoJsonSchema;
 import org.springframework.stereotype.Component;
 import sfs.model.SportsFacility;
 import sfs.model.User;
-import sfs.rest.dto.CreateFacilityRequest;
-import sfs.rest.dto.CreateUserRequest;
+import sfs.rest.dto.*;
 import sfs.service.RentalService;
 import sfs.service.SportsFacilityService;
 import sfs.service.UserService;
@@ -81,41 +80,50 @@ public class DataInitializer implements CommandLineRunner {
         mongoTemplate.createCollection("rentals", CollectionOptions.empty().schema(rentalSchema));
 
 
-        SportsFacility gym1 = sportsFacilityService.createFacilityFromDTO(
-                new CreateFacilityRequest(
-                        "FitFabric", 50, 200, "GYM",
-                        50, true, null, null, null, null
+        SportsFacility gym1 = sportsFacilityService.createGym(
+                new CreateGymRequest(
+                        "FitFabric",
+                        50.0,
+                        200,
+                        50,
+                        true
                 )
         );
 
-        SportsFacility court1 = sportsFacilityService.createFacilityFromDTO(
-                new CreateFacilityRequest(
-                        "Korty \"Szybka Piłka\"", 80, 4, "TENNIS_COURT",
-                        null, null, "CLAY", true, null, null
+        SportsFacility court1 = sportsFacilityService.createTennisCourt(
+                new CreateTennisCourtRequest(
+                        "Korty \"Szybka Piłka\"",
+                        80.0,
+                        4,
+                        "CLAY",
+                        true
                 )
         );
 
-        SportsFacility pool1 = sportsFacilityService.createFacilityFromDTO(
-                new CreateFacilityRequest(
-                        "Pływalnia \"Fala\"", 30, 100, "SWIMMING_POOL",
-                        null, null, null, null, 25, 6
+        SportsFacility pool1 = sportsFacilityService.createSwimmingPool(
+                new CreateSwimmingPoolRequest(
+                        "Pływalnia \"Fala\"",
+                        30.0,
+                        100,
+                        25,
+                        6
                 )
         );
 
-        User admin = userService.createUserFromDTO(
-                new CreateUserRequest("kdawid", "Karol", "Dawid", "ADMIN")
+        User admin = userService.createAdmin(
+                new CreateAdminRequest("kdawid", "Karol", "Dawid")
         );
 
-        User manager1 = userService.createUserFromDTO(
-                new CreateUserRequest("jkowalski", "Jan", "Kowalski", "MANAGER")
+        User manager1 = userService.createFacilityManager(
+                new CreateFacilityManagerRequest("jkowalski", "Jan", "Kowalski")
         );
 
-        User client1 = userService.createUserFromDTO(
-                new CreateUserRequest("mchodulski", "Mateusz", "Chodulski", "CLIENT")
+        User client1 = userService.createClient(
+                new CreateClientRequest("mchodulski", "Mateusz", "Chodulski")
         );
 
-        User client2 = userService.createUserFromDTO(
-                new CreateUserRequest("anowak", "Anna", "Nowak", "CLIENT")
+        User client2 = userService.createClient(
+                new CreateClientRequest("anowak", "Anna", "Nowak")
         );
 
         userService.activateUser(client1.getId());

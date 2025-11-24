@@ -6,7 +6,9 @@ import sfs.model.FacilityManager;
 import sfs.model.User;
 import org.springframework.stereotype.Service;
 import sfs.repository.UserRepository;
-import sfs.rest.dto.CreateUserRequest;
+import sfs.rest.dto.CreateAdminRequest;
+import sfs.rest.dto.CreateClientRequest;
+import sfs.rest.dto.CreateFacilityManagerRequest;
 import sfs.rest.dto.UpdateUserRequest;
 
 import java.util.List;
@@ -27,25 +29,33 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User createUserFromDTO(CreateUserRequest request) throws Exception {
-        User newUser;
-        String type = request.getUserType();
+    public Client createClient(CreateClientRequest request) throws Exception {
+        Client client = new Client();
+        client.setLogin(request.getLogin());
+        client.setFirstName(request.getFirstName());
+        client.setLastName(request.getLastName());
 
-        if(type.equalsIgnoreCase("CLIENT")){
-            newUser = new Client();
-        } else if (type.equalsIgnoreCase("ADMIN")){
-            newUser = new Admin();
-        } else if (type.equalsIgnoreCase("MANAGER")){
-            newUser = new FacilityManager();
-        } else {
-            throw new Exception("Nieznany typ użytkownika: " + request.getUserType());
-        }
+        return (Client) userRepository.save(client);
+    }
 
-        newUser.setLogin(request.getLogin());
-        newUser.setFirstName(request.getFirstName());
-        newUser.setLastName(request.getLastName());
+    @Override
+    public Admin createAdmin(CreateAdminRequest request) throws Exception {
+        Admin admin = new Admin();
+        admin.setLogin(request.getLogin());
+        admin.setFirstName(request.getFirstName());
+        admin.setLastName(request.getLastName());
 
-        return userRepository.save(newUser);
+        return (Admin) userRepository.save(admin);
+    }
+
+    @Override
+    public FacilityManager createFacilityManager(CreateFacilityManagerRequest request) throws Exception {
+        FacilityManager manager = new FacilityManager();
+        manager.setLogin(request.getLogin());
+        manager.setFirstName(request.getFirstName());
+        manager.setLastName(request.getLastName());
+
+        return (FacilityManager) userRepository.save(manager);
     }
 
 

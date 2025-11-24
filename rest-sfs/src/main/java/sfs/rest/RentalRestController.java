@@ -10,7 +10,7 @@ import sfs.service.RentalService;
 import java.util.List;
 import java.util.UUID;
 
-@RestController // obsługa HTTP, return JSON
+@RestController
 @RequestMapping("/api/v1/rentals")
 public class RentalRestController {
 

@@ -3,7 +3,7 @@ package sfs.rest.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class CreateUserRequest {
+public class CreateAdminRequest {
     @NotBlank
     @Size(min = 4, max = 20)
     private String login;
@@ -16,18 +16,13 @@ public class CreateUserRequest {
     @Size(min = 4, max = 20)
     private String lastName;
 
-    @NotBlank
-    @Size(min = 5, max = 7)
-    private String userType;
-
-    public CreateUserRequest() {
+    public CreateAdminRequest() {
     }
 
-    public CreateUserRequest(String login, String firstName, String lastName, String userType) {
+    public CreateAdminRequest(String login, String firstName, String lastName) {
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userType = userType;
     }
 
     public String getLogin() {
@@ -52,13 +47,5 @@ public class CreateUserRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 }

@@ -3,7 +3,9 @@ package sfs.rest;
 import jakarta.validation.Valid;
 import sfs.model.User;
 import org.springframework.web.bind.annotation.*;
-import sfs.rest.dto.CreateUserRequest;
+import sfs.rest.dto.CreateAdminRequest;
+import sfs.rest.dto.CreateClientRequest;
+import sfs.rest.dto.CreateFacilityManagerRequest;
 import sfs.rest.dto.UpdateUserRequest;
 import sfs.service.UserService;
 
@@ -50,9 +52,19 @@ public class UserRestController {
         return userService.findUserByLogin(login);
     }
 
-    @PostMapping("/create")
-    public User createUser(@Valid @RequestBody CreateUserRequest request) throws Exception {
-        return userService.createUserFromDTO(request);
+    @PostMapping("/clients")
+    public User createClient(@Valid @RequestBody CreateClientRequest request) throws Exception {
+        return userService.createClient(request);
+    }
+
+    @PostMapping("/admins")
+    public User createAdmin(@Valid @RequestBody CreateAdminRequest request) throws Exception {
+        return userService.createAdmin(request);
+    }
+
+    @PostMapping("/facility-managers")
+    public User createFacilityManager(@Valid @RequestBody CreateFacilityManagerRequest request) throws Exception {
+        return userService.createFacilityManager(request);
     }
 
     @PutMapping("/{id}")
