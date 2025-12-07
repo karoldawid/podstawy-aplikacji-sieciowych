@@ -1,30 +1,31 @@
 package sfs.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import sfs.exception.ResourceConflictException;
 import sfs.exception.ResourceNotFoundException;
 import sfs.model.Client;
 import sfs.model.User;
 import sfs.model.Rental;
 import sfs.model.SportsFacility;
-import org.springframework.stereotype.Service;
-import sfs.repository.UserRepository;
-import sfs.repository.RentalRepository;
-import sfs.repository.SportsFacilityRepository;
+import sfs.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
+@ApplicationScoped
 public class RentalServiceImpl implements RentalService{
-    private final UserRepository userRepository;
-    private final SportsFacilityRepository sportsFacilityRepository;
-    private final RentalRepository rentalRepository;
+
+    private final MongoUserRepository userRepository;
+    private final MongoSportsFacilityRepository sportsFacilityRepository;
+    private final MongoRentalRepository rentalRepository;
 
     private final Object rentalLock = new Object();
 
-    public RentalServiceImpl(UserRepository userRepository, SportsFacilityRepository sportsFacilityRepository, RentalRepository rentalRepository){
+    @Inject
+    public RentalServiceImpl(MongoUserRepository userRepository, MongoSportsFacilityRepository sportsFacilityRepository, MongoRentalRepository rentalRepository){
         this.userRepository = userRepository;
         this.sportsFacilityRepository = sportsFacilityRepository;
         this.rentalRepository = rentalRepository;
@@ -48,7 +49,6 @@ public class RentalServiceImpl implements RentalService{
 
         SportsFacility sportsFacility = sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new ResourceNotFoundException("Obiekt sportowy o ID: " + facilityId + " nie istnieje."));
 
-        // na PAS trzeba sprawdzić czy klient jest aktywny
         synchronized (rentalLock) {
             if (!isFacilityAvailable(facilityId, startTime, endTime)) {
                 throw new ResourceConflictException("Obiekt sportowy o ID: " + facilityId + " jest juz wypozyczony.");
@@ -102,7 +102,6 @@ public class RentalServiceImpl implements RentalService{
         return rentalRepository.findCurrentByFacilityId(facilityId, LocalDateTime.now());
     }
 
-    // zakończenie alokacji polega na ustawieniu atrybutu czasu zakończenia alokacji
     @Override
     public Rental endRental(String id) throws RentalException {
         Rental rental =  rentalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono rezerwacji o ID: " + id));
@@ -110,7 +109,6 @@ public class RentalServiceImpl implements RentalService{
         return rentalRepository.save(rental);
     }
 
-    // usuwanie alokacji dotyczy tylko alokacji nie zakończonych
     @Override
     public void deleteRental(String id) throws RentalException {
         Rental rental = rentalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Wypożyczenie o ID: " + id + " nie istnieje."));

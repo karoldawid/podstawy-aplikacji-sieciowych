@@ -1,5 +1,8 @@
 package sfs.model;
 
+import io.quarkus.mongodb.panache.common.MongoEntity;
+
+@MongoEntity(collection = "facilities")
 public class Gym extends SportsFacility{
     private int areaInSqm;
     private boolean hasSauna;
@@ -9,6 +12,8 @@ public class Gym extends SportsFacility{
         this.areaInSqm = areaInSqm;
         this.hasSauna = hasSauna;
     }
+
+    public Gym() {}
 
     public int getAreaInSqm() {
         return areaInSqm;

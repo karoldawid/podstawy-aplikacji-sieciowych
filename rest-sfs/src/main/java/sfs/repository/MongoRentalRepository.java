@@ -1,94 +1,54 @@
 package sfs.repository;
-
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Repository;
+import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.bson.types.ObjectId;
 import sfs.model.Rental;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 
-@Repository
-public class MongoRentalRepository implements RentalRepository{
-    private final MongoTemplate mongoTemplate;
+@ApplicationScoped
+public class MongoRentalRepository implements PanacheMongoRepository<Rental> {
 
-    public MongoRentalRepository(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
-
-    @Override
     public Rental save(Rental rental) {
-        return mongoTemplate.save(rental, "rentals");
+        persistOrUpdate(rental);
+        return rental;
     }
 
-    @Override
     public Optional<Rental> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, Rental.class, "rentals"));
+        try {
+            return find("_id", new ObjectId(id)).firstResultOptional();
+        } catch (IllegalArgumentException e) { return Optional.empty(); }
     }
 
-    @Override
-    public List<Rental> findAll() {
-        return mongoTemplate.findAll(Rental.class, "rentals");
-    }
-
-    @Override
     public void deleteById(String id) {
-            Query query = new Query(Criteria.where("_id").is(id));
-            mongoTemplate.remove(query, Rental.class, "rentals");
+        try {
+            delete("_id", new ObjectId(id));
+        } catch (IllegalArgumentException e) {}
     }
 
-    @Override
     public List<Rental> findByClientId(String clientId) {
-        Query query = new Query(Criteria.where("clientId").is(clientId));
-        return mongoTemplate.find(query, Rental.class, "rentals");
+        return find("clientId", clientId).list();
     }
 
-    @Override
     public List<Rental> findByFacilityId(String facilityId) {
-        Query query = new Query(Criteria.where("facilityId").is(facilityId));
-        return mongoTemplate.find(query, Rental.class, "rentals");
+        return find("facilityId", facilityId).list();
     }
 
-    @Override
     public List<Rental> findPastByClientId(String clientId, LocalDateTime now) {
-        Criteria criteria = Criteria.where("clientId").is(clientId)
-                .and("endTime").ne(null).lt(now);
-        Query query = new Query(criteria);
-        return mongoTemplate.find(query, Rental.class, "rentals");
+        return find("clientId = ?1 and endTime != null and endTime < ?2", clientId, now).list();
     }
 
-    @Override
     public List<Rental> findCurrentByClientId(String clientId, LocalDateTime now) {
-        Criteria clientCriteria = Criteria.where("clientId").is(clientId);
-        Criteria timeCriteria = new Criteria().orOperator(
-                Criteria.where("endTime").is(null),
-                Criteria.where("endTime").gt(now)
-        );
-
-        Query query = new Query(clientCriteria.andOperator(timeCriteria));
-        return mongoTemplate.find(query, Rental.class, "rentals");
+        return find("clientId = ?1 and (endTime = null or endTime > ?2)", clientId, now).list();
     }
 
-    @Override
     public List<Rental> findPastByFacilityId(String facilityId, LocalDateTime now) {
-        Criteria criteria = Criteria.where("facilityId").is(facilityId)
-                .and("endTime").ne(null).lt(now);
-        Query query = new Query(criteria);
-        return mongoTemplate.find(query, Rental.class, "rentals");
+        return find("facilityId = ?1 and endTime != null and endTime < ?2", facilityId, now).list();
     }
 
-    @Override
     public List<Rental> findCurrentByFacilityId(String facilityId, LocalDateTime now) {
-        Criteria facilityCriteria = Criteria.where("facilityId").is(facilityId);
-        Criteria timeCriteria = new Criteria().orOperator(
-                Criteria.where("endTime").is(null),
-                Criteria.where("endTime").gt(now)
-        );
-
-        Query query = new Query(facilityCriteria.andOperator(timeCriteria));
-        return mongoTemplate.find(query, Rental.class, "rentals");
+        return find("facilityId = ?1 and (endTime = null or endTime > ?2)", facilityId, now).list();
     }
 }

@@ -1,67 +1,79 @@
 package sfs.rest;
 
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import sfs.model.Rental;
-import org.springframework.web.bind.annotation.*;
 import sfs.rest.dto.CreateRentalRequest;
 import sfs.service.RentalException;
 import sfs.service.RentalService;
 
 import java.util.List;
-import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/v1/rentals")
+@Path("/api/v1/rentals")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class RentalRestController {
 
-    private final RentalService rentalService;
+    @Inject
+    RentalService rentalService;
 
     public RentalRestController(RentalService rentalService){
         this.rentalService = rentalService;
     }
 
-    @GetMapping("/facility/{facilityId}")
-    public List<Rental> getRentalsForFacility(@PathVariable String facilityId){
+    @GET
+    @Path("/facility/{facilityId}")
+    public List<Rental> getRentalsForFacility(@PathParam("facilityId") String facilityId){
         return rentalService.getRentalsForFacility(facilityId);
     }
 
-    @GetMapping("/client/{clientId}")
-    public List<Rental> getRentalsForClient(@PathVariable String clientId){
+    @GET
+    @Path("/client/{clientId}")
+    public List<Rental> getRentalsForClient(@PathParam("clientId") String clientId){
         return rentalService.getRentalsForClient(clientId);
     }
 
-    @PostMapping("/rent")
-    public Rental rentFacility(@Valid @RequestBody CreateRentalRequest request) throws RentalException {
+    @POST
+    @Path("/rent")
+    public Rental rentFacility(@Valid CreateRentalRequest request) throws RentalException {
         return rentalService.rentFacility(request.getClientId(), request.getFacilityId(), request.getStartTime(), request.getEndTime());
     }
 
-    @GetMapping("/client/past/{clientId}")
-    public List<Rental> getPastRentalsForClient(@PathVariable String clientId) {
+    @GET
+    @Path("/client/past/{clientId}")
+    public List<Rental> getPastRentalsForClient(@PathParam("clientId") String clientId) {
         return rentalService.getPastRentalsForClient(clientId);
     }
 
-    @GetMapping("/client/current/{clientId}")
-    public List<Rental> getCurrentRentalsForClient(@PathVariable String clientId) {
+    @GET
+    @Path("/client/current/{clientId}")
+    public List<Rental> getCurrentRentalsForClient(@PathParam("clientId") String clientId) {
         return rentalService.getCurrentRentalsForClient(clientId);
     }
 
-    @GetMapping("/facility/past/{facilityId}")
-    public List<Rental> getPastRentalsForFacility(@PathVariable String facilityId) {
+    @GET
+    @Path("/facility/past/{facilityId}")
+    public List<Rental> getPastRentalsForFacility(@PathParam("facilityId") String facilityId) {
         return rentalService.getPastRentalsForFacility(facilityId);
     }
 
-    @GetMapping("/facility/current/{facilityId}")
-    public List<Rental> getCurrentRentalsForFacility(@PathVariable String facilityId) {
+    @GET
+    @Path("/facility/current/{facilityId}")
+    public List<Rental> getCurrentRentalsForFacility(@PathParam("facilityId") String facilityId) {
         return rentalService.getCurrentRentalsForFacility(facilityId);
     }
 
-    @PutMapping("/finish/{id}")
-    public Rental endRental(@PathVariable String id) throws RentalException {
+    @PUT
+    @Path("/finish/{id}")
+    public Rental endRental(@PathParam("id") String id) throws RentalException {
         return rentalService.endRental(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteRental(@PathVariable String id) throws RentalException {
+    @DELETE
+    @Path("/{id}")
+    public void deleteRental(@PathParam("id") String id) throws RentalException {
         rentalService.deleteRental(id);
     }
 }

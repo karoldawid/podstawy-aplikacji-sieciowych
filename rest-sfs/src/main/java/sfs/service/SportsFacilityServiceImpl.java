@@ -1,8 +1,12 @@
 package sfs.service;
 
-import org.springframework.stereotype.Service;
+import io.quarkus.security.IdentityAttribute;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import sfs.exception.ResourceNotFoundException;
 import sfs.model.*;
+import sfs.repository.MongoRentalRepository;
+import sfs.repository.MongoSportsFacilityRepository;
 import sfs.repository.RentalRepository;
 import sfs.repository.SportsFacilityRepository;
 import sfs.rest.dto.*;
@@ -10,13 +14,15 @@ import sfs.rest.dto.*;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+
+@ApplicationScoped
 public class SportsFacilityServiceImpl implements SportsFacilityService{
 
-    private final SportsFacilityRepository sportsFacilityRepository;
-    private final RentalRepository rentalRepository;
+    private final MongoSportsFacilityRepository sportsFacilityRepository;
+    private final MongoRentalRepository rentalRepository;
 
-    public SportsFacilityServiceImpl(SportsFacilityRepository sportsFacilityRepository, RentalRepository rentalRepository){
+    @Inject
+    public SportsFacilityServiceImpl(MongoSportsFacilityRepository sportsFacilityRepository, MongoRentalRepository rentalRepository){
         this.sportsFacilityRepository = sportsFacilityRepository;
         this.rentalRepository = rentalRepository;
     }
@@ -138,7 +144,7 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
 
     @Override
     public List<SportsFacility> getAllFacilities() {
-        return sportsFacilityRepository.findAll();
+        return sportsFacilityRepository.findAllFacilities();
     }
 
     @Override

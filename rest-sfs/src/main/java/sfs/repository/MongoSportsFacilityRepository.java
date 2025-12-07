@@ -1,41 +1,35 @@
 package sfs.repository;
-
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Repository;
+import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.bson.types.ObjectId;
 import sfs.model.SportsFacility;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class MongoSportsFacilityRepository implements SportsFacilityRepository{
+@ApplicationScoped
+public class MongoSportsFacilityRepository implements PanacheMongoRepository<SportsFacility> {
 
-    private final MongoTemplate mongoTemplate;
-
-    public MongoSportsFacilityRepository(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
+    public SportsFacility save(SportsFacility facility) {
+        persistOrUpdate(facility);
+        return facility;
     }
 
-    @Override
-    public SportsFacility save(SportsFacility sportsFacility) {
-        return mongoTemplate.save(sportsFacility, "facilities");
-    }
-
-    @Override
     public Optional<SportsFacility> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, SportsFacility.class, "facilities"));
+        try {
+            return find("_id", new ObjectId(id)).firstResultOptional();
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
     }
 
-    @Override
-    public List<SportsFacility> findAll() {
-        return mongoTemplate.findAll(SportsFacility.class, "facilities");
+    public List<SportsFacility> findAllFacilities() {
+        return listAll();
     }
 
-    @Override
     public void deleteById(String id) {
-        Query query = new Query(Criteria.where("_id").is(id));
-        mongoTemplate.remove(query, SportsFacility.class, "facilities");
+        try {
+            delete("_id", new ObjectId(id));
+        } catch (IllegalArgumentException e) {}
     }
 }

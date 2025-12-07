@@ -1,14 +1,18 @@
 package sfs.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.quarkus.mongodb.panache.common.MongoEntity;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
 
-import java.util.UUID;
 
-@Document(collection = "users")
+@MongoEntity(collection = "users")
+@BsonDiscriminator
 public abstract class User {
-    @Id
-    private String id;
+    @BsonId
+    private ObjectId id;
     private String firstName;
     private String lastName;
     boolean isActive;
@@ -24,19 +28,23 @@ public abstract class User {
     public User() {
     }
 
-    public String getId() {
-        return id;
+
+    public ObjectId getId() { return id; }
+    public void setId(ObjectId id) { this.id = id; }
+
+    @JsonProperty("id")
+    @BsonIgnore
+    public String getHexId() {
+        return id != null ? id.toHexString() : null;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @JsonProperty("id")
+    @BsonIgnore
+    public void setHexId(String id) {
+        if (id != null && !id.isEmpty()) {
+            this.id = new ObjectId(id);
+        }
     }
-
-    //    public UUID getId() { return id; }
-//
-//    public void setId(UUID id) {
-//        this.id = id;
-//    }
 
     public String getFirstName() {
         return firstName;

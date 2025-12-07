@@ -1,25 +1,29 @@
 package sfs.rest;
 
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import org.jboss.resteasy.reactive.RestResponse;
 import sfs.model.User;
 import sfs.rest.dto.CreateAdminRequest;
 import sfs.service.UserService;
 
-@RestController
-@RequestMapping("/api/v1/admins")
+@Path("/api/v1/admins")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class AdminRestController {
-    private final UserService userService;
+
+    @Inject
+    UserService userService;
 
     public AdminRestController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User createAdmin(@Valid @RequestBody CreateAdminRequest request) throws Exception {
-        return userService.createAdmin(request);
+    @POST
+    public RestResponse<User> createAdmin(@Valid CreateAdminRequest request) throws Exception {
+        User admin = userService.createAdmin(request);
+        return RestResponse.status(RestResponse.Status.CREATED, admin);
     }
 }

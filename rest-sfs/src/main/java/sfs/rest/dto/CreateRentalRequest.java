@@ -3,7 +3,6 @@ package sfs.rest.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -45,22 +44,6 @@ public class CreateRentalRequest {
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }
-
-    //    public UUID getFacilityId() {
-//        return facilityId;
-//    }
-//
-//    public void setFacilityId(UUID facilityId) {
-//        this.facilityId = facilityId;
-//    }
-//
-//    public UUID getClientId() {
-//        return clientId;
-//    }
-//
-//    public void setClientId(UUID clientId) {
-//        this.clientId = clientId;
-//    }
 
     public LocalDateTime getStartTime() {
         return startTime;

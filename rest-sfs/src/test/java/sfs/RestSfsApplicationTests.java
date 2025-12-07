@@ -1,39 +1,41 @@
 package sfs;
 
-import io.restassured.RestAssured;
+import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.Index;
-import static io.restassured.RestAssured.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
+
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.IsEqual.*;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@QuarkusTest
 class RestSfsApplicationTests {
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    @Inject
+    MongoClient mongoClient;
 
     @BeforeEach
     void setUp() {
-        RestAssured.port = port;
+        // W Quarkusie nie musisz ustawiać RestAssured.port - framework robi to sam.
 
-        mongoTemplate.dropCollection("users");
-        mongoTemplate.dropCollection("facilities");
-        mongoTemplate.dropCollection("rentals");
+        MongoDatabase db = mongoClient.getDatabase("sportsfacility");
 
-        Index uniqueLoginIndex = new Index().on("login", Sort.Direction.ASC).unique();
-        mongoTemplate.indexOps("users").createIndex(uniqueLoginIndex);
+        // 1. Wyczyść kolekcje (odpowiednik dropCollection w Springu)
+        // Używamy try-catch lub po prostu drop(), bo jeśli kolekcja nie istnieje, nic się nie stanie (w nowszych sterownikach)
+        try { db.getCollection("users").drop(); } catch (Exception e) {}
+        try { db.getCollection("facilities").drop(); } catch (Exception e) {}
+        try { db.getCollection("rentals").drop(); } catch (Exception e) {}
+
+        // 2. Utwórz indeks unikalny (odpowiednik indexOps w Springu)
+        // Jest to kluczowe dla testu shouldReturn409OnUserUniquenessViolation
+        db.getCollection("users").createIndex(Indexes.ascending("login"), new IndexOptions().unique(true));
     }
 
     @Test
@@ -248,7 +250,7 @@ class RestSfsApplicationTests {
                 .when()
                 .delete("/api/v1/facilities/{id}", id)
                 .then()
-                .statusCode(200);
+                .statusCode(204); // JAX-RS void zwraca 204 No Content, a nie 200
 
         given()
                 .when()
@@ -370,7 +372,7 @@ class RestSfsApplicationTests {
                 .when()
                 .post("/api/v1/clients")
                 .then()
-                .statusCode(409);
+                .statusCode(409); // Tutaj weryfikujemy czy GlobalExceptionHandler dobrze łapie DuplicateKeyException
 
         given()
                 .when()
@@ -450,7 +452,8 @@ class RestSfsApplicationTests {
 
         given().when().put("/api/v1/users/{id}/activate", clientId).then().statusCode(200);
 
-        String nonExistentFacilityId = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+        // Używamy prawidłowego formatu ObjectId, ale nieistniejącego, bo Panache może rzucić błąd parsowania dla "ffff..."
+        String nonExistentFacilityId = "507f1f77bcf86cd799439011";
 
         String rentalJson = String.format("""
         {
