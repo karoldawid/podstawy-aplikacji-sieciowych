@@ -1,5 +1,6 @@
 package sfs.service;
 
+import sfs.exception.ResourceNotFoundException;
 import sfs.model.Admin;
 import sfs.model.Client;
 import sfs.model.FacilityManager;
@@ -68,8 +69,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserById(String id) throws Exception {
-        return userRepository.findById(id).orElseThrow(() -> new Exception("Nie znaleziona użytkownika o ID: " + id));
+    public User getUserById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Nie znaleziona użytkownika o ID: " + id));
     }
 
     @Override
@@ -98,8 +99,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findUserByLogin(String login) throws Exception {
-        return userRepository.findByLogin(login).orElseThrow(() -> new Exception("Użytkownik o loginie: " + login + " nie został odnaleziony."));
+    public User findUserByLogin(String login) {
+        return userRepository.findByLogin(login).orElseThrow(() -> new ResourceNotFoundException("Użytkownik o loginie: " + login + " nie został odnaleziony."));
     }
 
     @Override

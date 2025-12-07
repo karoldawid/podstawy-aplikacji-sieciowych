@@ -1,6 +1,7 @@
 package sfs.service;
 
 import org.springframework.stereotype.Service;
+import sfs.exception.ResourceNotFoundException;
 import sfs.model.*;
 import sfs.repository.RentalRepository;
 import sfs.repository.SportsFacilityRepository;
@@ -131,8 +132,8 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
 //    }
 
     @Override
-    public SportsFacility getFacilityById(String facilityId) throws Exception {
-        return sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new Exception("Nie udało się znaleźć obiektu o ID: " + facilityId + "."));
+    public SportsFacility getFacilityById(String facilityId) {
+        return sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new ResourceNotFoundException("Nie udało się znaleźć obiektu o ID: " + facilityId + "."));
     }
 
     @Override
@@ -141,12 +142,12 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
     }
 
     @Override
-    public void deleteFacility(String facilityId) throws Exception {
+    public void deleteFacility(String facilityId) {
         if (sportsFacilityRepository.findById(facilityId).isEmpty()){
-            throw new Exception("Obiekt sportowy o ID: " + facilityId + " nie istnieje, więc nie można go usunąć.");
+            throw new ResourceNotFoundException("Obiekt sportowy o ID: " + facilityId + " nie istnieje, więc nie można go usunąć.");
         }
         if (!rentalRepository.findByFacilityId(facilityId).isEmpty()){
-           throw new Exception("Nie można usunąć obiektu o ID: " + facilityId + " , ponieważ jest ZAREZERWOWANY.");
+           throw new ResourceNotFoundException("Nie można usunąć obiektu o ID: " + facilityId + " , ponieważ jest ZAREZERWOWANY.");
         }
         sportsFacilityRepository.deleteById(facilityId);
     }

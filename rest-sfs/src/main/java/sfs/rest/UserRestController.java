@@ -32,12 +32,12 @@ public class UserRestController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/activate/{id}")
+    @PutMapping("/{id}/activate")
     public User activateUser(@PathVariable String id) throws Exception {
         return userService.activateUser(id);
     }
 
-    @PutMapping("/deactivate/{id}")
+    @PutMapping("/{id}/deactivate")
     public User deactivateUser(@PathVariable String id) throws Exception {
         return userService.deactivateUser(id);
     }
@@ -50,21 +50,6 @@ public class UserRestController {
     @GetMapping("/search/exact")
     public User findUserByLogin(@RequestParam String login) throws Exception {
         return userService.findUserByLogin(login);
-    }
-
-    @PostMapping("/clients")
-    public User createClient(@Valid @RequestBody CreateClientRequest request) throws Exception {
-        return userService.createClient(request);
-    }
-
-    @PostMapping("/admins")
-    public User createAdmin(@Valid @RequestBody CreateAdminRequest request) throws Exception {
-        return userService.createAdmin(request);
-    }
-
-    @PostMapping("/facility-managers")
-    public User createFacilityManager(@Valid @RequestBody CreateFacilityManagerRequest request) throws Exception {
-        return userService.createFacilityManager(request);
     }
 
     @PutMapping("/{id}")

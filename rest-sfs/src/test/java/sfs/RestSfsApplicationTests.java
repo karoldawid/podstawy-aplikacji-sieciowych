@@ -37,67 +37,92 @@ class RestSfsApplicationTests {
     }
 
     @Test
-    void contextLoads() {
-    }
+    void shouldCreateFacilityManager() {
+        String managerJson = """
+            {
+                "login": "managerCreate",
+                "firstName": "Jan",
+                "lastName": "Tworzyciel"
+            }
+        """;
 
-    @Test
-    void shouldCRUUser(){
-        String userJson = """
-                {
-                    "login": "milka2016",
-                    "firstName": "Milka",
-                    "lastName": "Maltanka"
-                }
-                """;
-
-        String newUserId = given()
+        String newId = given()
                 .contentType(ContentType.JSON)
-                .body(userJson)
+                .body(managerJson)
                 .when()
-                .post("/api/v1/users/clients")
+                .post("/api/v1/facility-managers")
                 .then()
-                .statusCode(200)
+                .statusCode(201)
                 .extract()
                 .path("id");
 
-        assertNotNull(newUserId);
+        given()
+                .when()
+                .get("/api/v1/users/{id}", newId)
+                .then()
+                .statusCode(200)
+                .body("login", equalTo("managerCreate"))
+                .body("firstName", equalTo("Jan"))
+                .body("lastName", equalTo("Tworzyciel"))
+                .body("active", equalTo(false));
+    }
+
+    @Test
+    void shouldGetFacilityManagerById() {
+        String managerJson = """
+            { "login": "managerRead", "firstName": "Adam", "lastName": "Czytalski" }
+        """;
+        String id = given()
+                .contentType(ContentType.JSON)
+                .body(managerJson)
+                .when().post("/api/v1/facility-managers")
+                .then().statusCode(201).extract().path("id");
 
         given()
                 .when()
-                .get("/api/v1/users/{id}", newUserId)
+                .get("/api/v1/users/{id}", id)
                 .then()
                 .statusCode(200)
-                .body("login", equalTo("milka2016"))
-                .body("firstName", equalTo("Milka"))
-                .body("lastName", equalTo("Maltanka"));
+                .body("id", equalTo(id))
+                .body("login", equalTo("managerRead"))
+                .body("firstName", equalTo("Adam"));
+    }
 
-        String updateUserJson = """
-        {
-            "firstName": "Miśka",
-            "lastName": "Jasperska"
-        }
+    @Test
+    void shouldUpdateFacilityManager() {
+        String createJson = """
+            { "login": "managerUpdate", "firstName": "Piotr", "lastName": "Zmianowski" }
+        """;
+        String id = given()
+                .contentType(ContentType.JSON)
+                .body(createJson)
+                .when().post("/api/v1/facility-managers")
+                .then().statusCode(201).extract().path("id");
+
+        String updateJson = """
+            { "firstName": "Paweł", "lastName": "Nowy" }
         """;
 
         given()
                 .contentType(ContentType.JSON)
-                .body(updateUserJson)
+                .body(updateJson)
                 .when()
-                .put("/api/v1/users/{id}", newUserId)
+                .put("/api/v1/users/{id}", id)
                 .then()
                 .statusCode(200);
 
         given()
                 .when()
-                .get("/api/v1/users/{id}", newUserId)
+                .get("/api/v1/users/{id}", id)
                 .then()
                 .statusCode(200)
-                .body("login", equalTo("milka2016"))
-                .body("firstName", equalTo("Miśka"))
-                .body("lastName", equalTo("Jasperska"));
+                .body("login", equalTo("managerUpdate"))
+                .body("firstName", equalTo("Paweł"))
+                .body("lastName", equalTo("Nowy"));
     }
 
     @Test
-    void shouldCRUDFacility() {
+    void shouldCreateGym() {
         String facilityJson = """
             {
                 "name": "Siłownia Błysk",
@@ -126,39 +151,110 @@ class RestSfsApplicationTests {
                 .then()
                 .statusCode(200)
                 .body("name", equalTo("Siłownia Błysk"))
-                .body("areaInSqm", equalTo(300));
+                .body("areaInSqm", equalTo(300))
+                .body("hasSauna", equalTo(true));
+    }
 
-        String updateFacilityJson = """
-        {
-            "name": "Siłownia Po Remoncie",
-            "pricePerHour": 80.0,
-            "capacity": 60,
-            "areaInSqm": 300,
-            "hasSauna": true
-        }
-    """;
+    @Test
+    void shouldGetGymById() {
+        String facilityJson = """
+            {
+                "name": "Siłownia Odczyt",
+                "pricePerHour": 60.0,
+                "capacity": 40,
+                "areaInSqm": 200,
+                "hasSauna": false
+            }
+        """;
+        String id = given()
+                .contentType(ContentType.JSON)
+                .body(facilityJson)
+                .when().post("/api/v1/facilities/gyms")
+                .then().statusCode(200).extract().path("id");
+
+        given()
+                .when()
+                .get("/api/v1/facilities/{id}", id)
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(id))
+                .body("name", equalTo("Siłownia Odczyt"))
+                .body("capacity", equalTo(40));
+    }
+
+    @Test
+    void shouldUpdateGym() {
+        String createJson = """
+            {
+                "name": "Siłownia Stara",
+                "pricePerHour": 50.0,
+                "capacity": 30,
+                "areaInSqm": 150,
+                "hasSauna": false
+            }
+        """;
+        String id = given()
+                .contentType(ContentType.JSON)
+                .body(createJson)
+                .when().post("/api/v1/facilities/gyms")
+                .then().statusCode(200).extract().path("id");
+
+        String updateJson = """
+            {
+                "name": "Siłownia Nowa",
+                "pricePerHour": 55.0,
+                "capacity": 35,
+                "areaInSqm": 150,
+                "hasSauna": true
+            }
+        """;
 
         given()
                 .contentType(ContentType.JSON)
-                .body(updateFacilityJson)
+                .body(updateJson)
                 .when()
-                .put("/api/v1/facilities/gyms/{id}", newFacilityId)
-                .then().log().all()
-                .statusCode(200)
-                .body("name", equalTo("Siłownia Po Remoncie"))
-                .body("capacity", equalTo(60));
-
-        given()
-                .when()
-                .delete("/api/v1/facilities/{id}", newFacilityId)
+                .put("/api/v1/facilities/gyms/{id}", id)
                 .then()
                 .statusCode(200);
 
         given()
                 .when()
-                .get("/api/v1/facilities/{id}", newFacilityId)
+                .get("/api/v1/facilities/{id}", id)
                 .then()
-                .statusCode(400);
+                .statusCode(200)
+                .body("name", equalTo("Siłownia Nowa"))
+                .body("pricePerHour", equalTo(55.0f))
+                .body("hasSauna", equalTo(true));
+    }
+
+    @Test
+    void shouldDeleteGym() {
+        String createJson = """
+            {
+                "name": "Siłownia Usuwana",
+                "pricePerHour": 40.0,
+                "capacity": 20,
+                "areaInSqm": 100,
+                "hasSauna": false
+            }
+        """;
+        String id = given()
+                .contentType(ContentType.JSON)
+                .body(createJson)
+                .when().post("/api/v1/facilities/gyms")
+                .then().statusCode(200).extract().path("id");
+
+        given()
+                .when()
+                .delete("/api/v1/facilities/{id}", id)
+                .then()
+                .statusCode(200);
+
+        given()
+                .when()
+                .get("/api/v1/facilities/{id}", id)
+                .then()
+                .statusCode(404);
     }
 
     @Test
@@ -169,11 +265,11 @@ class RestSfsApplicationTests {
         String clientId = given()
                 .contentType(ContentType.JSON)
                 .body(clientJson)
-                .when().post("/api/v1/users/clients")
-                .then().statusCode(200).extract().path("id");
+                .when().post("/api/v1/clients")
+                .then().statusCode(201).extract().path("id");
 
         given()
-                .when().put("/api/v1/users/activate/{id}", clientId)
+                .when().put("/api/v1/users/{id}/activate", clientId)
                 .then().statusCode(200);
 
         String facilityJson = """
@@ -183,7 +279,7 @@ class RestSfsApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(facilityJson)
                 .when().post("/api/v1/facilities/tennis-courts")
-                .then().log().all().statusCode(200).extract().path("id");
+                .then().statusCode(200).extract().path("id");
 
         String rentalJson = String.format("""
         {
@@ -194,7 +290,7 @@ class RestSfsApplicationTests {
         }
         """, clientId, facilityId, "2099-12-01T10:00:00", "2099-12-01T11:00:00");
 
-        given()
+        String rentalId = given()
                 .contentType(ContentType.JSON)
                 .body(rentalJson)
                 .when()
@@ -202,7 +298,16 @@ class RestSfsApplicationTests {
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
-                .body("clientId", equalTo(clientId));
+                .body("clientId", equalTo(clientId))
+                .extract().path("id");
+
+        given()
+                .when()
+                .get("/api/v1/rentals/client/{clientId}", clientId)
+                .then()
+                .statusCode(200)
+                .body("[0].id", equalTo(rentalId))
+                .body("[0].facilityId", equalTo(facilityId));
     }
 
     @Test
@@ -219,7 +324,7 @@ class RestSfsApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(badUserJson)
                 .when()
-                .post("/api/v1/users/clients")
+                .post("/api/v1/clients")
                 .then()
                 .statusCode(400);
     }
@@ -246,7 +351,7 @@ class RestSfsApplicationTests {
     }
 
     @Test
-    void shouldReturn400OnUserUniquenessViolation() {
+    void shouldReturn409OnUserUniquenessViolation() {
         String userJson = """
             { "login": "unikalnyLogin", "firstName": "Test", "lastName": "User" }
         """;
@@ -255,32 +360,39 @@ class RestSfsApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(userJson)
                 .when()
-                .post("/api/v1/users/clients")
+                .post("/api/v1/clients")
                 .then()
-                .statusCode(200);
+                .statusCode(201);
 
         given()
                 .contentType(ContentType.JSON)
                 .body(userJson)
                 .when()
-                .post("/api/v1/users/clients")
+                .post("/api/v1/clients")
                 .then()
-                .statusCode(400);
+                .statusCode(409);
+
+        given()
+                .when()
+                .get("/api/v1/users/search/exact?login=unikalnyLogin")
+                .then()
+                .statusCode(200)
+                .body("login", equalTo("unikalnyLogin"));
     }
 
     @Test
-    void shouldReturn400OnAllocationConflict() {
+    void shouldReturn409OnAllocationConflict() {
         String clientJson = """
             { "login": "renter", "firstName": "Test", "lastName": "Renter" }
         """;
         String clientId = given()
                 .contentType(ContentType.JSON)
                 .body(clientJson)
-                .when().post("/api/v1/users/clients")
-                .then().statusCode(200).extract().path("id");
+                .when().post("/api/v1/clients")
+                .then().statusCode(201).extract().path("id");
 
         given()
-                .when().put("/api/v1/users/activate/{id}", clientId)
+                .when().put("/api/v1/users/{id}/activate", clientId)
                 .then().statusCode(200);
 
         String facilityJson = """
@@ -290,7 +402,7 @@ class RestSfsApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(facilityJson)
                 .when().post("/api/v1/facilities/tennis-courts")
-                .then().log().all().statusCode(200).extract().path("id");
+                .then().statusCode(200).extract().path("id");
 
         String rentalJson = String.format("""
         {
@@ -315,6 +427,53 @@ class RestSfsApplicationTests {
                 .when()
                 .post("/api/v1/rentals/rent")
                 .then()
-                .statusCode(400);
+                .statusCode(409);
+
+        given()
+                .when()
+                .get("/api/v1/rentals/client/{clientId}", clientId)
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(1));
+    }
+
+    @Test
+    void shouldReturn404WhenRentingNonExistentFacility() {
+        String clientJson = """
+            { "login": "test404", "firstName": "Test", "lastName": "Missing" }
+        """;
+        String clientId = given()
+                .contentType(ContentType.JSON)
+                .body(clientJson)
+                .when().post("/api/v1/clients")
+                .then().statusCode(201).extract().path("id");
+
+        given().when().put("/api/v1/users/{id}/activate", clientId).then().statusCode(200);
+
+        String nonExistentFacilityId = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+
+        String rentalJson = String.format("""
+        {
+            "clientId": "%s",
+            "facilityId": "%s",
+            "startTime": "2099-01-01T10:00:00",
+            "endTime": "2099-01-01T11:00:00"
+        }
+        """, clientId, nonExistentFacilityId);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(rentalJson)
+                .when()
+                .post("/api/v1/rentals/rent")
+                .then()
+                .statusCode(404);
+
+        given()
+                .when()
+                .get("/api/v1/rentals/client/{clientId}", clientId)
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(0));
     }
 }
