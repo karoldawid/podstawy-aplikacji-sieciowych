@@ -52,7 +52,6 @@ public class RentalServiceImpl implements RentalService{
         synchronized (rentalLock) {
             if (!isFacilityAvailable(facilityId, startTime, endTime)) {
                 throw new ResourceConflictException("Obiekt sportowy o ID: " + facilityId + " jest juz wypozyczony.");
-                // metoda poniżej to sprawdza
             }
 
             Rental newRental = new Rental(clientId, facilityId, startTime, endTime);

@@ -128,15 +128,6 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
         return (SwimmingPool) sportsFacilityRepository.save(pool);
     }
 
-//    @Override
-//    public SportsFacility updateFacility(String facilityId, UpdateFacilityRequest request) throws Exception {
-//        SportsFacility sportsFacility = getFacilityById(facilityId);
-//        sportsFacility.setName(request.getName());
-//        sportsFacility.setPricePerHour(request.getPricePerHour());
-//        sportsFacility.setCapacity(request.getCapacity());
-//        return sportsFacilityRepository.save(sportsFacility);
-//    }
-
     @Override
     public SportsFacility getFacilityById(String facilityId) {
         return sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new ResourceNotFoundException("Nie udało się znaleźć obiektu o ID: " + facilityId + "."));
