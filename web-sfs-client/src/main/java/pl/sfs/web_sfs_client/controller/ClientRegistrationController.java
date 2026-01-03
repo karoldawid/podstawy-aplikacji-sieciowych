@@ -32,7 +32,7 @@ public class ClientRegistrationController {
             restTemplate.postForEntity(BACKEND_URL,clientDto, Void.class);
             return "redirect:/register?success";
         } catch (Exception e){
-            model.addAttribute("errprMessage", "Błąd rejestracji: " + e.getMessage());
+            model.addAttribute("errorMessage", "Błąd rejestracji: " + e.getMessage());
             return "register-form";
         }
     }
