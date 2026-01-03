@@ -2,13 +2,15 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for rest-sfs" enabled="true">
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Annotation profile for web-sfs-client" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
+        <module name="web-sfs-client" />
         <module name="rest-sfs" />
       </profile>
     </annotationProcessing>
@@ -16,6 +18,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="rest-sfs" options="-parameters" />
+      <module name="web-sfs-client" options="-parameters" />
     </option>
   </component>
 </project>
