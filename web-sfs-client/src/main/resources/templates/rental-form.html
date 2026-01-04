@@ -20,7 +20,7 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
-    <form th:action="@{/rent}" th:object="${rentalDto}" method="post">
+    <form th:action="@{/rental}" th:object="${rentalDto}" method="post">
         <div class="form-group">
             <label>facilityId:</label>
             <input type="text" th:field="*{facilityId}" required/>
@@ -34,13 +34,13 @@
         </div>
         <div class="form-group">
             <label>poczatek wypozyczenia:</label>
-            <input type="date" th:field="*{startTime}" required/>
+            <input type="datetime-local" th:field="*{startTime}" required/>
             <p th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color:red;"></p>
 
         </div>
         <div class="form-group">
             <label>koniec wypozyczenia:</label>
-            <input type="date" th:field="*{endTime}" required/>
+            <input type="datetime-local" th:field="*{endTime}" required/>
             <p th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" style="color:red;"></p>
 
         </div>

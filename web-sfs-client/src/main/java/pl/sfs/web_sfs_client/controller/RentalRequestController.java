@@ -15,7 +15,7 @@ import pl.sfs.web_sfs_client.dto.RentalRequestDto;
 @RequestMapping("/rental")
 public class RentalRequestController {
     private final RestTemplate restTemplate;
-    private final String BACKEND_URL = "http://localhost:8080/api/v1/rentals";
+    private final String BACKEND_URL = "http://localhost:8080/api/v1/rentals/rent";
 
     public RentalRequestController (RestTemplate restTemplate){
         this.restTemplate = restTemplate;
