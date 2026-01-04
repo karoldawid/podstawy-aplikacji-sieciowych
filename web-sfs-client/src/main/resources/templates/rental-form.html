@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wypożyczanie obiektu</title>
+    <style>
+        body {font-family: sans-serif; padding: 20px;}
+        .form-group {margin-bottom: 15px;}
+        label {display: block; font-weight: bold;}
+        .error {color: red;}
+        .success {color: green; }
+    </style>
+</head>
+<body>
+    <h2>Wypożycz obiekt</h2>
+    <div th:if="${param.success}" class="success">
+        <p>Udało się wypożyczyć obiekt</p>
+    </div>
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form th:action="@{/rent}" th:object="${rentalDto}" method="post">
+        <div class="form-group">
+            <label>facilityId:</label>
+            <input type="text" th:field="*{facilityId}" required/>
+            <p th:if="${#fields.hasErrors('facilityId')}" th:errors="*{facilityId}" style="color:red;"></p>
+        </div>
+        <div class="form-group">
+            <label>clientId:</label>
+            <input type="text" th:field="*{clientId}" required/>
+            <p th:if="${#fields.hasErrors('clientId')}" th:errors="*{clientId}" style="color:red;"></p>
+
+        </div>
+        <div class="form-group">
+            <label>poczatek wypozyczenia:</label>
+            <input type="date" th:field="*{startTime}" required/>
+            <p th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color:red;"></p>
+
+        </div>
+        <div class="form-group">
+            <label>koniec wypozyczenia:</label>
+            <input type="date" th:field="*{endTime}" required/>
+            <p th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" style="color:red;"></p>
+
+        </div>
+
+        <button type="submit">Zarejestruj</button>
+    </form>
+
+<!--facilityId  clientId   startTime   endTime-->
+</body>
+</html>

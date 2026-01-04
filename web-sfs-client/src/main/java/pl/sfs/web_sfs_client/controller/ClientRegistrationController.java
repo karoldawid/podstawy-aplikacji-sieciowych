@@ -1,7 +1,9 @@
 package pl.sfs.web_sfs_client.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +29,11 @@ public class ClientRegistrationController {
     }
 
     @PostMapping
-    public String registerClient(@ModelAttribute("clientDto") ClientRegistrationDto clientDto, Model model){
+    public String registerClient(@Valid @ModelAttribute("clientDto") ClientRegistrationDto clientDto, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()){
+            return "register-form";
+        }
+
         try{
             restTemplate.postForEntity(BACKEND_URL,clientDto, Void.class);
             return "redirect:/register?success";
