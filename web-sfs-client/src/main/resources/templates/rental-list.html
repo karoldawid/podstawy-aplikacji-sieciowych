@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Wypożyczeń Klienta</title>
+    <style>
+        body {font-family: sans-serif; padding: 20px;}
+        table {width: 100%; border-collapse: collapse; margin-top: 20px;}
+        th, td {border: 1px solid #ddd; padding: 8px; text-align: left;}
+        th {background-color: #f2f2f2;}
+        .error {color: red;}
+        .success {color: green;}
+        .search-box {background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;}
+    </style>
+</head>
+<body>
+
+<h2>Twoje Wypożyczenia</h2>
+<a href="/rental">← Wróć do wypożyczania</a>
+
+<div th:if="${param.deleted}" class="success"><p>Pomyślnie usunięto rezerwację.</p></div>
+<div th:if="${errorMessage}" class="error"><p th:text="${errorMessage}"></p></div>
+
+<div class="search-box">
+    <form action="/rental/list" method="get">
+        <label>Podaj ID Klienta:</label>
+        <input type="text" name="clientId" th:value="${searchClientId}" placeholder="np. jan_kowalski" required/>
+        <button type="submit">Pokaż listę</button>
+    </form>
+</div>
+
+<div th:if="${rentals != null}">
+    <h3 th:if="${#lists.isEmpty(rentals)}">Brak wypożyczeń dla tego klienta.</h3>
+
+    <table th:if="${!#lists.isEmpty(rentals)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Obiekt</th>
+            <th>Początek</th>
+            <th>Koniec</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${rentals}">
+            <td th:text="${r.id}">1</td>
+            <td th:text="${r.facilityId}">Sala 1</td>
+            <td th:text="${r.startTime}">2023-01-01</td>
+            <td th:text="${r.endTime}">2023-01-02</td>
+            <td>
+                <form th:action="@{/rental/delete/{id}(id=${r.id})}" method="post"
+                      onsubmit="return confirm('Czy na pewno usunąć?');">
+                    <input type="hidden" name="clientId" th:value="${r.clientId}"/>
+                    <button type="submit" style="color:red; cursor:pointer;">Usuń</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
