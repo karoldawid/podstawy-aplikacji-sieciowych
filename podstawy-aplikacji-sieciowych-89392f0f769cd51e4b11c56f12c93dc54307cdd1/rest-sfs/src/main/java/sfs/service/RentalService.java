@@ -11,6 +11,7 @@ public interface RentalService {
             throws RentalException;
     boolean isFacilityAvailable(String facilityId, LocalDateTime startTime, LocalDateTime endTime);
 
+    List<Rental> getAllRentals();
     List<Rental> getRentalsForFacility(String facilityId);
     List<Rental> getRentalsForClient(String clientId);
     List<Rental> getPastRentalsForClient(String clientId);

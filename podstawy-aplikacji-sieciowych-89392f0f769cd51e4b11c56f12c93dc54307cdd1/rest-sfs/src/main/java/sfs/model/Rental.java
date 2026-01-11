@@ -1,5 +1,6 @@
 package sfs.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +13,9 @@ public class Rental {
     private String id;
     private String clientId;
     private String facilityId;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTime;
 
     public Rental(String clientId, String facilityId, LocalDateTime startTime, LocalDateTime endTime) {
@@ -69,6 +72,10 @@ public class Rental {
 //    public void setFacilityId(UUID facilityId) {
 //        this.facilityId = facilityId;
 //    }
+
+    public LocalDateTime getBeginTime() {
+        return startTime;
+    }
 
     public LocalDateTime getStartTime() {
         return startTime;

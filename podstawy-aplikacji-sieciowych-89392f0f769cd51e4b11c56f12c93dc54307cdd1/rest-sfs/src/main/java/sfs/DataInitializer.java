@@ -119,11 +119,11 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         User client1 = userService.createClient(
-                new CreateClientRequest("mchodulski", "Mateusz", "Chodulski")
+                new CreateClientRequest("mchodulski", "Mateusz", "Chodulski", "123456789")
         );
 
         User client2 = userService.createClient(
-                new CreateClientRequest("anowak", "Anna", "Nowak")
+                new CreateClientRequest("anowak", "Anna", "Nowak", "987654321")
         );
 
         userService.activateUser(client1.getId());

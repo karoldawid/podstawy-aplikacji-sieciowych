@@ -36,6 +36,8 @@ public class UserServiceImpl implements UserService{
         client.setFirstName(request.getFirstName());
         client.setLastName(request.getLastName());
 
+        client.setPhoneNumber(request.getPhoneNumber());
+
         return (Client) userRepository.save(client);
     }
 
@@ -65,6 +67,11 @@ public class UserServiceImpl implements UserService{
         User user = getUserById(id);
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
+
+        if (user instanceof Client && request.getPhoneNumber() != null) {
+            ((Client) user).setPhoneNumber(request.getPhoneNumber());
+        }
+
         return userRepository.save(user);
     }
 

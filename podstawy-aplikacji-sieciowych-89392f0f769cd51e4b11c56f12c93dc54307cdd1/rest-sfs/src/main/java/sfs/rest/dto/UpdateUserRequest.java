@@ -12,12 +12,15 @@ public class UpdateUserRequest {
     @Size(min = 3, max = 20)
     private String lastName;
 
+    private String phoneNumber;
+
     public UpdateUserRequest() {
     }
 
-    public UpdateUserRequest(String firstName, String lastName) {
+    public UpdateUserRequest(String firstName, String lastName, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getFirstName() {
@@ -34,5 +37,13 @@ public class UpdateUserRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

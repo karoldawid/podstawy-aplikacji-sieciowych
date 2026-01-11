@@ -73,6 +73,11 @@ public class RentalServiceImpl implements RentalService{
     }
 
     @Override
+    public List<Rental> getAllRentals() {
+        return rentalRepository.findAll();
+    }
+
+    @Override
     public List<Rental> getRentalsForClient(String clientId) {
         return rentalRepository.findByClientId(clientId);
     }
