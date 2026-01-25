@@ -1,6 +1,5 @@
 package sfs.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -71,18 +70,6 @@ public abstract class User {
         this.login = login;
     }
 
-    @JsonProperty("accessLevel")
-    public String getAccessLevel() {
-        if (this instanceof Client) {
-            return "CLIENT";
-        } else if (this instanceof Admin) {
-            return "ADMIN";
-        } else if (this instanceof FacilityManager) {
-            return "RESOURCE_MANAGER";
-        }
-        return "UNKNOWN";
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -92,6 +79,11 @@ public abstract class User {
                 ", lastName='" + lastName + '\'' +
                 ", isActive='" + isActive + '\'' +
                 '}';
+    }
+
+    public String getRole() {
+        return this.getClass().getSimpleName().toUpperCase();
+        // Zwróci np. "CLIENT", "ADMIN", "FACILITYMANAGER"
     }
 
 }

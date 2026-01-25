@@ -8,7 +8,6 @@ import sfs.model.User;
 import sfs.rest.dto.CreateAdminRequest;
 import sfs.service.UserService;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/admins")
 public class AdminRestController {

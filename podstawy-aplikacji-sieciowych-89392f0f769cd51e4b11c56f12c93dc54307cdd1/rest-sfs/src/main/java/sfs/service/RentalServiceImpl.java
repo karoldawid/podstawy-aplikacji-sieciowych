@@ -73,11 +73,6 @@ public class RentalServiceImpl implements RentalService{
     }
 
     @Override
-    public List<Rental> getAllRentals() {
-        return rentalRepository.findAll();
-    }
-
-    @Override
     public List<Rental> getRentalsForClient(String clientId) {
         return rentalRepository.findByClientId(clientId);
     }
@@ -105,6 +100,11 @@ public class RentalServiceImpl implements RentalService{
     @Override
     public List<Rental> getCurrentRentalsForFacility(String facilityId) {
         return rentalRepository.findCurrentByFacilityId(facilityId, LocalDateTime.now());
+    }
+
+    @Override
+    public List<Rental> getAllRentals() {
+        return rentalRepository.findAll();
     }
 
     // zakończenie alokacji polega na ustawieniu atrybutu czasu zakończenia alokacji

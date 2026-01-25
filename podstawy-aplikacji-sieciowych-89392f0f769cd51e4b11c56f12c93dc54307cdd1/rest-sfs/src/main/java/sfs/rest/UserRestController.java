@@ -12,7 +12,6 @@ import sfs.service.UserService;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserRestController {

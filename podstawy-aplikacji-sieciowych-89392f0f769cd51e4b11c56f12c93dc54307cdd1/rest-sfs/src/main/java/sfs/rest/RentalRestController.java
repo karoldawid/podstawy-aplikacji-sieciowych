@@ -10,7 +10,6 @@ import sfs.service.RentalService;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/rentals")
 public class RentalRestController {
@@ -19,6 +18,11 @@ public class RentalRestController {
 
     public RentalRestController(RentalService rentalService){
         this.rentalService = rentalService;
+    }
+
+    @GetMapping // To mapuje na GET /api/v1/rentals (zakładając, że klasa ma @RequestMapping("/api/v1/rentals"))
+    public List<Rental> getAllRentals() {
+        return rentalService.getAllRentals();
     }
 
     @GetMapping("/facility/{facilityId}")
@@ -34,11 +38,6 @@ public class RentalRestController {
     @PostMapping("/rent")
     public Rental rentFacility(@Valid @RequestBody CreateRentalRequest request) throws RentalException {
         return rentalService.rentFacility(request.getClientId(), request.getFacilityId(), request.getStartTime(), request.getEndTime());
-    }
-
-    @GetMapping
-    public List<Rental> getAllRentals() {
-        return rentalService.getAllRentals();
     }
 
     @GetMapping("/client/past/{clientId}")
