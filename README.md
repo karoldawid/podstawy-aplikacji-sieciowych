@@ -31,16 +31,3 @@ A full-stack web application designed for managing sports facilities, user accou
 ### Prerequisites
 - Docker and Docker Compose installed on your machine.
 
-### Running the application
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/karoldawid/sports-facility-infrastructure.git](https://github.com/karoldawid/sports-facility-infrastructure.git)
-   cd sports-facility-infrastructure```
-2. Start the application environment using Docker Compose:
-   ```bash
-   docker-compose up --build```
-3. Access the application:
-Frontend UI: ```bash
-http://localhost:5173```
-Backend API: ```bash
-http://localhost:8080```
